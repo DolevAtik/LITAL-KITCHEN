@@ -161,9 +161,9 @@ function renderMenu() {
                             <strong>₪${opt.price}</strong>
                         </div>
                         <div class="quantity-control">
-                            <button class="qty-btn" aria-label="Decrease quantity" onclick="updateCart('${uniqueId}', '${item.name.replace(/'/g, "\\'")}', '${opt.label.replace(/'/g, "\\'")}', ${opt.price}, -1, '${category.categoryId}')">−</button>
+                            <button class="qty-btn" aria-label="Decrease quantity" onclick="updateCart('${uniqueId}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${opt.label.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${opt.price}, -1, '${category.categoryId}')">−</button>
                             <span class="qty-val" id="qty-${uniqueId}">${cartQty}</span>
-                            <button class="qty-btn" aria-label="Increase quantity" onclick="updateCart('${uniqueId}', '${item.name.replace(/'/g, "\\'")}', '${opt.label.replace(/'/g, "\\'")}', ${opt.price}, 1, '${category.categoryId}')">+</button>
+                            <button class="qty-btn" aria-label="Increase quantity" onclick="updateCart('${uniqueId}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${opt.label.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${opt.price}, 1, '${category.categoryId}')">+</button>
                         </div>
                     </div>
                 `;
@@ -308,15 +308,15 @@ function renderCartModal() {
             <div class="cart-item-info">
                 <span class="cart-item-title">
                     ${item.name} 
-                    <button class="cart-remove-btn" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'")}', '${item.optionLabel.replace(/'/g, "\\'")}', ${item.price}, -${item.quantity}, '${item.categoryId}')" title="הסר הכל">&times;</button>
+                    <button class="cart-remove-btn" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${item.optionLabel.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${item.price}, -${item.quantity}, '${item.categoryId}')" title="הסר הכל">&times;</button>
                 </span>
                 <span class="cart-item-opt">${labelText}</span>
             </div>
             <div class="cart-item-price">
                 <div class="quantity-control modal-qty">
-                    <button class="qty-btn" aria-label="Decrease quantity" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'")}', '${item.optionLabel.replace(/'/g, "\\'")}', ${item.price}, -1, '${item.categoryId}')">−</button>
+                    <button class="qty-btn" aria-label="Decrease quantity" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${item.optionLabel.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${item.price}, -1, '${item.categoryId}')">−</button>
                     <span class="qty-val">${item.quantity}</span>
-                    <button class="qty-btn" aria-label="Increase quantity" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'")}', '${item.optionLabel.replace(/'/g, "\\'")}', ${item.price}, 1, '${item.categoryId}')">+</button>
+                    <button class="qty-btn" aria-label="Increase quantity" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${item.optionLabel.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${item.price}, 1, '${item.categoryId}')">+</button>
                 </div>
                 <div style="font-weight: 700;">₪${item.price * item.quantity}</div>
             </div>
