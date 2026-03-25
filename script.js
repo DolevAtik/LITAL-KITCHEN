@@ -7,7 +7,13 @@ const MENU_DATA = [
             { id: 'm1', name: 'שניצל בג׳בטה', description: 'עם מטבוחה, חציל מטוגן, חומוס מבושל, פלפל חריף וחמוצים בצד', options: [ { label: 'רגיל', price: 40 } ] },
             { id: 'm2', name: 'מנה קוסקוס עם מפרום / עוף', options: [ { label: 'רגיל', price: 50 } ] },
             { id: 'm3', name: 'מנה קוסקוס צמחוני', options: [ { label: 'רגיל', price: 40 } ] },
-            { id: 'm4', name: 'דיל משפחתי', description: 'כולל: 2 ליטר קוסקוס, 2 ליטר מרק, 4 מפרום / עוף לבחירה, חמוצים ומטבוחה בצד', options: [ { label: 'משפחתי', price: 170 } ] }
+            { 
+                id: 'm4', 
+                name: '🔥 דיל משפחתי', 
+                description: 'כולל: 2 ליטר קוסקוס, 2 ליטר מרק, 4 מפרום / עוף לבחירה, חמוצים ומטבוחה בצד', 
+                options: [ { label: 'משפחתי', price: 170 } ],
+                isSpecialDeal: true 
+            }
         ]
     },
     {
@@ -17,17 +23,17 @@ const MENU_DATA = [
         subtitle: 'מחירים לפי 250 מ״ל / 500 מ״ל',
         items: [
             { id: 's1', name: 'מטבוחה', options: [ { label: '250 מ"ל', price: 25 }, { label: '500 מ"ל', price: 40 } ] },
-            { id: 's2', name: 'חציל בעשייה', options: [ { label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 } ] },
+            { id: 's2', name: 'חציל בעריסה', options: [ { label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 } ] },
             { id: 's3', name: 'תפוח אדמה במיונז', options: [ { label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 } ] },
             { id: 's4', name: 'חציל במיונז', options: [ { label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 25 } ] },
             { id: 's5', name: 'כרוב אדום', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
-            { id: 's6', name: 'כרוב סגול במיונז', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
-            { id: 's7', name: 'כרוב לבן', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
+            { id: 's6', name: 'כרוב תירס במיונז', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
+            { id: 's7', name: 'כרוב גזר תירס', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
             { id: 's8', name: 'כרוב חמוץ', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
             { id: 's9', name: 'סלק אדום', options: [ { label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 } ] },
             { id: 's10', name: 'סלק ביצים', options: [ { label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 } ] },
             { id: 's11', name: 'טחינה', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
-            { id: 's12', name: 'סלטה', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
+            { id: 's12', name: 'סלסה', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
             { id: 's13', name: 'גזר חי חריף', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
             { id: 's14', name: 'גזר מבושל', options: [ { label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 } ] },
             { id: 's15', name: 'פלפל חריף מטוגן', options: [ { label: '250 מ"ל', price: 25 }, { label: '500 מ"ל', price: 35 } ] },
@@ -41,7 +47,6 @@ const MENU_DATA = [
         items: [
             { id: 'main1', name: 'קציצות דגים (10 יח׳)', options: [ { label: 'רגיל', price: 60 } ] },
             { id: 'main2', name: 'דג טונה / מושט בחריימה מרוקאי / מושט מטוגן', options: [ { label: 'יחידה', price: 25 } ] },
-            { id: 'main3', name: 'חומוס מבושל', options: [ { label: '1 ליטר', price: 40 } ] },
             { id: 'main4', name: 'פשטידת מחמאר', options: [ { label: 'רגיל', price: 70 } ] },
             { id: 'main5', name: 'צלי בשר - יחידה', options: [ { label: 'יחידה', price: 30 } ] },
             { id: 'main6', name: 'צלי בשר - 5 יחידות', options: [ { label: '5 יחידות', price: 140 } ] },
@@ -56,6 +61,7 @@ const MENU_DATA = [
         title: 'תוספות',
         icon: '🍚',
         items: [
+            { id: 'side4', name: 'חומוס מרוקאי מבושל', options: [ { label: '1 ליטר', price: 40 } ] },
             { id: 'side1', name: 'תפוח אדמה', options: [ { label: '1 ליטר', price: 30 }, { label: '2 ליטר', price: 70 } ] },
             { id: 'side2', name: 'זיתים ברוטב', options: [ { label: '1 ליטר', price: 30 }, { label: '2 ליטר', price: 60 } ] },
             { id: 'side3', name: 'אורז', options: [ { label: '1 ליטר', price: 25 }, { label: '2 ליטר', price: 45 } ] },
@@ -134,6 +140,10 @@ function renderMenu() {
             const itemEl = document.createElement('div');
             itemEl.className = 'menu-item';
             
+            if (item.isSpecialDeal) {
+                itemEl.classList.add('special-deal-card');
+            }
+            
             let descriptionHtml = item.description ? `<p class="item-description">${item.description}</p>` : '';
             
             let optionsHtml = '<div class="price-options">';
@@ -177,6 +187,7 @@ function renderMenu() {
 
 function updateCart(id, name, optionLabel, price, change, categoryId) {
     if (!cart[id]) {
+        if (change <= 0) return; // Prevent creating an item if we are just subtracting from 0
         cart[id] = { name, optionLabel, price, quantity: 0, categoryId };
     }
     
@@ -262,7 +273,10 @@ function updateCartSummary() {
     const total = calculateTotal();
     cartTotalPriceEl.textContent = '₪' + total;
     
-    renderCartModal();
+    const cartModal = document.getElementById('cart-modal');
+    if (!cartModal.classList.contains('hidden')) {
+        renderCartModal();
+    }
 }
 
 function renderCartModal() {
@@ -273,9 +287,9 @@ function renderCartModal() {
 
     cartItemsContainer.innerHTML = '';
 
-    const items = Object.values(cart);
+    const itemEntries = Object.entries(cart);
     
-    if (items.length === 0) {
+    if (itemEntries.length === 0) {
         emptyMessage.style.display = 'block';
         orderForm.classList.add('hidden');
         modalTotal.textContent = '₪0';
@@ -285,17 +299,27 @@ function renderCartModal() {
     emptyMessage.style.display = 'none';
     orderForm.classList.remove('hidden');
 
-    items.forEach(item => {
+    itemEntries.forEach(([id, item]) => {
         const row = document.createElement('div');
         row.className = 'cart-item-row';
         const labelText = (item.optionLabel === 'רגיל' || item.optionLabel === 'יחידה' || item.optionLabel === 'משפחתי') ? '' : ` | ${item.optionLabel}`;
         
         row.innerHTML = `
             <div class="cart-item-info">
-                <span class="cart-item-title">${item.name}</span>
-                <span class="cart-item-opt">${labelText} (x${item.quantity})</span>
+                <span class="cart-item-title">
+                    ${item.name} 
+                    <button class="cart-remove-btn" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'")}', '${item.optionLabel.replace(/'/g, "\\'")}', ${item.price}, -${item.quantity}, '${item.categoryId}')" title="הסר הכל">&times;</button>
+                </span>
+                <span class="cart-item-opt">${labelText}</span>
             </div>
-            <div class="cart-item-price">₪${item.price * item.quantity}</div>
+            <div class="cart-item-price">
+                <div class="quantity-control modal-qty">
+                    <button class="qty-btn" aria-label="Decrease quantity" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'")}', '${item.optionLabel.replace(/'/g, "\\'")}', ${item.price}, -1, '${item.categoryId}')">−</button>
+                    <span class="qty-val">${item.quantity}</span>
+                    <button class="qty-btn" aria-label="Increase quantity" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'")}', '${item.optionLabel.replace(/'/g, "\\'")}', ${item.price}, 1, '${item.categoryId}')">+</button>
+                </div>
+                <div style="font-weight: 700;">₪${item.price * item.quantity}</div>
+            </div>
         `;
         cartItemsContainer.appendChild(row);
     });
@@ -304,11 +328,18 @@ function renderCartModal() {
     modalTotal.textContent = '₪' + total;
 }
 
+function getNextDate(daysOffset) {
+    const d = new Date();
+    d.setDate(d.getDate() + daysOffset);
+    return d;
+}
+
 function setupEventListeners() {
     const viewCartBtn = document.getElementById('view-cart-btn');
     const closeCartBtn = document.getElementById('close-cart');
     const cartModal = document.getElementById('cart-modal');
     const checkoutBtn = document.getElementById('checkout-btn');
+    const dateInput = document.getElementById('order-date');
 
     viewCartBtn.addEventListener('click', () => {
         renderCartModal();
@@ -325,17 +356,37 @@ function setupEventListeners() {
         }
     });
 
-    const dateInput = document.getElementById('order-date');
-    const tmr = new Date();
-    tmr.setDate(tmr.getDate() + 1);
-    dateInput.valueAsDate = tmr;
+    // Handle date validation
+    dateInput.addEventListener('input', (e) => {
+        if (!e.target.value) return;
+        
+        const dateObj = new Date(e.target.value);
+        const day = dateObj.getDay(); 
+        // 2 is Tuesday, 5 is Friday
+        if (day !== 2 && day !== 5) {
+            alert('הזמנות אפשריות לימי שלישי ושישי בלבד.');
+            e.target.value = '';
+        }
+    });
+
+    // Prefill the next Friday or Tuesday depending on which comes first
+    let offset = 1;
+    let found = false;
+    while (!found && offset < 14) {
+        const candidate = getNextDate(offset);
+        if (candidate.getDay() === 2 || candidate.getDay() === 5) {
+            dateInput.valueAsDate = candidate;
+            found = true;
+        }
+        offset++;
+    }
 
     checkoutBtn.addEventListener('click', () => {
         const date = dateInput.value;
         const deliveryType = document.querySelector('input[name="delivery"]:checked').value;
         
         if (!date) {
-            alert('אנא בחר תאריך להזמנה');
+            alert('אנא בחר תאריך יום שלישי או שישי להזמנה');
             return;
         }
 
