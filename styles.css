@@ -48,11 +48,14 @@ h1, h2, h3, h4 {
 }
 
 .logo {
-    max-width: 140px;
-    max-height: 140px;
-    margin-bottom: 1rem;
+    max-width: 300px;
+    max-height: 300px;
+    margin-bottom: 2rem;
     border-radius: var(--radius-md);
     object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .header h1 {
@@ -212,10 +215,27 @@ h1, h2, h3, h4 {
 
 .menu-item {
     transition: transform 0.2s ease, background-color 0.2s ease;
-    padding: 1rem;
+    padding: 0;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
     background-color: var(--bg-primary);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.item-details {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .menu-item:hover {
