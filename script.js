@@ -1,6 +1,6 @@
 const MENU_DATA = [
     {
-        categoryId: 'mannot',
+        categoryId: 'dishes',
         title: 'מנות',
         icon: '🥪',
         items: [
@@ -15,6 +15,31 @@ const MENU_DATA = [
                 options: [{ label: 'משפחתי', price: 170 }],
                 isSpecialDeal: true
             }
+        ]
+    },
+    {
+        categoryId: 'mains',
+        title: 'בשר / עוף',
+        icon: '🍲',
+        items: [
+            { id: 'main4', name: 'פשטידת מחמאר', image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 70 }] },
+            { id: 'main5', name: 'צלי בשר - יחידה', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 30 }] },
+            { id: 'main6', name: 'צלי בשר - 5 יחידות', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800', options: [{ label: '5 יחידות', price: 140 }] },
+            { id: 'main7', name: 'רולדת בשר ורוטב פטריות', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 80 }] },
+            { id: 'main8', name: 'מפרום (יחידה)', image: 'https://images.unsplash.com/photo-1534080564607-c98752441091?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 15 }] },
+            { id: 'main9', name: 'שניצל (יחידה)', image: 'https://images.unsplash.com/photo-1599921841143-8190e5a5c0bb?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 15 }] },
+            { id: 'main10', name: 'כרע עוף (יחידה)', image: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 15 }] },
+        ]
+    },
+    {
+        categoryId: 'fish',
+        title: 'דגים',
+        icon: '🐟',
+        items: [
+            { id: 'f1', name: 'קציצות דגים (10 יח׳)', image: 'https://images.unsplash.com/photo-1534080564607-c98752441091?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 70 }] },
+            { id: 'f2', name: 'דג סלמון ברוטב מרוקאי', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
+            { id: 'f3', name: 'דג בורי ברוטב מרוקאי', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
+            { id: 'f4', name: 'דג בורי מטוגן', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
         ]
     },
     {
@@ -39,24 +64,6 @@ const MENU_DATA = [
             { id: 's14', name: 'גזר מבושל', image: 'salads/carrot.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's15', name: 'פלפל חריף מטוגן', image: 'salads/pilpel_metugan.jpeg', options: [{ label: '250 מ"ל', price: 25 }, { label: '500 מ"ל', price: 35 }] },
             { id: 's16', name: 'חמוצי הבית', image: 'salads/hamutim.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
-        ]
-    },
-    {
-        categoryId: 'mains',
-        title: 'עיקריות',
-        icon: '🍲',
-        items: [
-            { id: 'main1', name: 'קציצות דגים (10 יח׳)', image: 'https://images.unsplash.com/photo-1534080564607-c98752441091?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 70 }] },
-            { id: 'main2_1', name: 'דג סלמון ברוטב מרוקאי', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
-            { id: 'main2_2', name: 'דג בורי ברוטב מרוקאי', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
-            { id: 'main2_3', name: 'דג בורי מטוגן', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
-            { id: 'main4', name: 'פשטידת מחמאר', image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 70 }] },
-            { id: 'main5', name: 'צלי בשר - יחידה', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 30 }] },
-            { id: 'main6', name: 'צלי בשר - 5 יחידות', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800', options: [{ label: '5 יחידות', price: 140 }] },
-            { id: 'main7', name: 'רולדת בשר ורוטב פטריות', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 80 }] },
-            { id: 'main8', name: 'מפרום (יחידה)', image: 'https://images.unsplash.com/photo-1534080564607-c98752441091?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 15 }] },
-            { id: 'main9', name: 'שניצל (יחידה)', image: 'https://images.unsplash.com/photo-1599921841143-8190e5a5c0bb?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 15 }] },
-            { id: 'main10', name: 'כרע עוף (יחידה)', image: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 15 }] },
         ]
     },
     {
