@@ -27,7 +27,7 @@ const MENU_DATA = [
             { id: 's2', name: 'חציל בעריסה', image: 'eggplant_arisa.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's3', name: 'תפוח אדמה במיונז', image: 'potato_salad.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's4', name: 'חציל במיונז', image: 'eggplant_mayo.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 25 }] },
-            { id: 's5', name: 'כרוב אדום', image: 'cabbage_mayo.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
+            { id: 's5', name: 'כרוב אדום', image: 'Cabbage_mayo.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's6', name: 'כרוב תירס במיונז', image: 'Cabbage_mayo_corn.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's7', name: 'כרוב גזר במיונז', image: 'cabbage_carrot_mayo.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's8', name: 'כרוב חמוץ', image: 'cabbage_3.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
