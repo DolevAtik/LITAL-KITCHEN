@@ -37,7 +37,7 @@ const MENU_DATA = [
         icon: '🐟',
         items: [
             { id: 'f1', name: 'קציצות דגים (10 יח׳)', image: 'https://images.unsplash.com/photo-1534080564607-c98752441091?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 70 }] },
-            { id: 'f2', name: 'דג מושט ברוטב מרוקאי', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
+            { id: 'f2', name: 'דג טונה ברוטב מרוקאי', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
             { id: 'f3', name: 'דג מושט ברוטב מרוקאי', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
             { id: 'f4', name: 'דג מושט מטוגן', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
         ]
