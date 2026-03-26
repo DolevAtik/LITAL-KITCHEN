@@ -4,17 +4,18 @@ const MENU_DATA = [
         title: 'מנות',
         icon: '🥪',
         items: [
-            { id: 'm1', name: 'שניצל בג׳בטה', image: 'https://images.unsplash.com/photo-1599921841143-8190e5a5c0bb?auto=format&fit=crop&q=80&w=800', description: 'עם מטבוחה, חציל מטוגן, חומוס מבושל, פלפל חריף וחמוצים בצד', options: [{ label: 'רגיל', price: 40 }] },
-            { id: 'm2', name: 'מנה קוסקוס עם מפרום / עוף', image: 'https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 50 }] },
-            { id: 'm3', name: 'מנה קוסקוס צמחוני', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 40 }] },
             {
-                id: 'm4',
+                id: 'm1',
                 name: '🔥 דיל משפחתי',
                 image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&q=80&w=800',
                 description: 'כולל: 2 ליטר קוסקוס, 2 ליטר מרק, 4 מפרום / עוף לבחירה, חמוצים ומטבוחה בצד',
                 options: [{ label: 'משפחתי', price: 170 }],
                 isSpecialDeal: true
-            }
+            },
+            { id: 'm2', name: 'שניצל בג׳בטה', image: 'https://images.unsplash.com/photo-1599921841143-8190e5a5c0bb?auto=format&fit=crop&q=80&w=800', description: 'עם מטבוחה, חציל מטוגן, חומוס מבושל, פלפל חריף וחמוצים בצד', options: [{ label: 'רגיל', price: 40 }] },
+            { id: 'm3', name: 'מנה קוסקוס עם מפרום / עוף', image: 'https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 50 }] },
+            { id: 'm4', name: 'מנה קוסקוס צמחוני', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 40 }] },
+            { id: 'm5', name: 'סולת 2 ליטר ', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 60 }] },
         ]
     },
     {
