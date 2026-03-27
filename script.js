@@ -12,10 +12,10 @@ const MENU_DATA = [
                 options: [{ label: 'משפחתי', price: 170 }],
                 isSpecialDeal: true
             },
-            { id: 'm2', name: 'שניצל בג׳בטה', image: 'https://images.unsplash.com/photo-1599921841143-8190e5a5c0bb?auto=format&fit=crop&q=80&w=800', description: 'עם מטבוחה, חציל מטוגן, חומוס מבושל, פלפל חריף וחמוצים בצד', options: [{ label: 'רגיל', price: 40 }] },
-            { id: 'm3', name: 'מנה קוסקוס עם מפרום / עוף', image: 'https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 50 }] },
-            { id: 'm4', name: 'מנה קוסקוס צמחוני', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 40 }] },
-            { id: 'm5', name: 'סולת 2 ליטר ', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 60 }] },
+            { id: 'm2', name: 'שניצל בג׳בטה', image: 'dishes/m2.jpeg', description: 'עם מטבוחה, חציל מטוגן, חומוס מבושל, פלפל חריף וחמוצים בצד', options: [{ label: 'רגיל', price: 40 }] },
+            { id: 'm3', name: 'מנה קוסקוס עם מפרום / עוף', image: 'dishes/m3.jpeg', options: [{ label: 'רגיל', price: 50 }] },
+            { id: 'm4', name: 'מנה קוסקוס צמחוני', image: 'dishes/m4.jpeg', options: [{ label: 'רגיל', price: 40 }] },
+            { id: 'm5', name: 'סולת 2 ליטר ', image: 'dishes/m5.jpeg', options: [{ label: 'רגיל', price: 60 }] },
         ]
     },
     {
@@ -23,13 +23,13 @@ const MENU_DATA = [
         title: 'בשר / עוף',
         icon: '🍲',
         items: [
-            { id: 'main4', name: 'פשטידת מחמאר', image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 70 }] },
-            { id: 'main5', name: 'צלי בשר - יחידה', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 30 }] },
-            { id: 'main6', name: 'צלי בשר - 5 יחידות', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800', options: [{ label: '5 יחידות', price: 140 }] },
-            { id: 'main7', name: 'רולדת בשר ורוטב פטריות', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 80 }] },
-            { id: 'main8', name: 'מפרום (יחידה)', image: 'https://images.unsplash.com/photo-1534080564607-c98752441091?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 15 }] },
-            { id: 'main9', name: 'שניצל (יחידה)', image: 'https://images.unsplash.com/photo-1599921841143-8190e5a5c0bb?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 15 }] },
-            { id: 'main10', name: 'כרע עוף (יחידה)', image: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 15 }] },
+            { id: 'main1', name: 'רולדת בשר ורוטב פטריות', image: 'mains/main1.jpeg', options: [{ label: 'רגיל', price: 80 }] },
+            { id: 'main2', name: 'פשטידת מחמאר', image: 'mains/main2.jpeg', options: [{ label: 'רגיל', price: 70 }] },
+            { id: 'main3', name: 'צלי בשר - יחידה', image: 'mains/main3+4.jpeg', options: [{ label: 'יחידה', price: 30 }] },
+            { id: 'main4', name: 'צלי בשר - 5 יחידות', image: 'mains/main3+4.jpeg', options: [{ label: '5 יחידות', price: 140 }] },
+            { id: 'main5', name: 'מפרום (יחידה)', image: 'mains/main5.jpeg', options: [{ label: 'יחידה', price: 15 }] },
+            { id: 'main6', name: 'שניצל (יחידה)', image: 'mains/main6.jpeg', options: [{ label: 'יחידה', price: 15 }] },
+            { id: 'main7', name: 'כרע עוף (יחידה)', image: 'mains/main7.jpeg', options: [{ label: 'יחידה', price: 15 }] },
         ]
     },
     {
@@ -37,10 +37,10 @@ const MENU_DATA = [
         title: 'דגים',
         icon: '🐟',
         items: [
-            { id: 'f1', name: 'קציצות דגים (10 יח׳)', image: 'https://images.unsplash.com/photo-1534080564607-c98752441091?auto=format&fit=crop&q=80&w=800', options: [{ label: 'רגיל', price: 70 }] },
-            { id: 'f2', name: 'דג טונה ברוטב מרוקאי', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
-            { id: 'f3', name: 'דג מושט ברוטב מרוקאי', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
-            { id: 'f4', name: 'דג מושט מטוגן', image: 'https://images.unsplash.com/photo-1534939561126-755ecf15a19c?auto=format&fit=crop&q=80&w=800', options: [{ label: 'יחידה', price: 25 }] },
+            { id: 'f1', name: 'קציצות דגים (10 יח׳)', image: 'fish/f1.jpeg', options: [{ label: 'רגיל', price: 70 }] },
+            { id: 'f2', name: 'דג טונה ברוטב מרוקאי', image: 'fish/f2.jpeg', options: [{ label: 'יחידה', price: 25 }] },
+            { id: 'f3', name: 'דג מושט ברוטב מרוקאי', image: 'fish/f3.jpeg', options: [{ label: 'יחידה', price: 25 }] },
+            { id: 'f4', name: 'דג מושט מטוגן', image: 'fish/f4.jpeg', options: [{ label: 'יחידה', price: 25 }] },
         ]
     },
     {
@@ -72,10 +72,10 @@ const MENU_DATA = [
         title: 'תוספות',
         icon: '🍚',
         items: [
-            { id: 'side4', name: 'חומוס מרוקאי מבושל', image: 'https://images.unsplash.com/photo-1541518763039-461628879ec3?auto=format&fit=crop&q=80&w=800', options: [{ label: '1 ליטר', price: 40 }] },
-            { id: 'side1', name: 'תפוח אדמה', image: 'https://images.unsplash.com/photo-1518310327277-30d7c0bb3582?auto=format&fit=crop&q=80&w=800', options: [{ label: '1 ליטר', price: 35 }, { label: '2 ליטר', price: 70 }] },
-            { id: 'side2', name: 'זיתים ברוטב', image: 'https://images.unsplash.com/photo-1586516313531-1e2409f7df22?auto=format&fit=crop&q=80&w=800', options: [{ label: '1 ליטר', price: 30 }, { label: '2 ליטר', price: 60 }] },
-            { id: 'side3', name: 'אורז', image: 'rice.avif', options: [{ label: '1 ליטר', price: 25 }, { label: '2 ליטר', price: 45 }] },
+            { id: 'side4', name: 'חומוס מרוקאי מבושל', image: 'sides/side4.jpeg', options: [{ label: '1 ליטר', price: 40 }] },
+            { id: 'side1', name: 'תפוח אדמה', image: 'sides/side1.jpeg', options: [{ label: '1 ליטר', price: 35 }, { label: '2 ליטר', price: 70 }] },
+            { id: 'side2', name: 'זיתים ברוטב', image: 'sides/side2.jpeg', options: [{ label: '1 ליטר', price: 30 }, { label: '2 ליטר', price: 60 }] },
+            { id: 'side3', name: 'אורז', image: 'sides/side3.jpeg', options: [{ label: '1 ליטר', price: 25 }, { label: '2 ליטר', price: 45 }] },
         ]
     }
 ];
