@@ -7,7 +7,7 @@ const MENU_DATA = [
             {
                 id: 'm1',
                 name: '🔥 דיל משפחתי',
-                image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&q=80&w=800',
+                image: 'dishes/m1.png',
                 description: 'כולל: 2 ליטר קוסקוס, 2 ליטר מרק, 4 מפרום / עוף לבחירה, חמוצים ומטבוחה בצד',
                 options: [{ label: 'משפחתי', price: 170 }],
                 isSpecialDeal: true
@@ -40,7 +40,7 @@ const MENU_DATA = [
             { id: 'f1', name: 'קציצות דגים (10 יח׳)', image: 'fish/f1.jpeg', options: [{ label: 'רגיל', price: 70 }] },
             { id: 'f2', name: 'דג טונה ברוטב מרוקאי', image: 'fish/f2.jpeg', options: [{ label: 'יחידה', price: 25 }] },
             { id: 'f3', name: 'דג מושט ברוטב מרוקאי', image: 'fish/f3.jpeg', options: [{ label: 'יחידה', price: 25 }] },
-            { id: 'f4', name: 'דג מושט מטוגן', image: 'fish/f4.jpeg', options: [{ label: 'יחידה', price: 25 }] },
+            { id: 'f4', name: 'דג מושט מטוגן', image: 'fish/f4.jpg', options: [{ label: 'יחידה', price: 25 }] },
         ]
     },
     {
@@ -75,7 +75,7 @@ const MENU_DATA = [
             { id: 'side4', name: 'חומוס מרוקאי מבושל', image: 'sides/side4.jpeg', options: [{ label: '1 ליטר', price: 40 }] },
             { id: 'side1', name: 'תפוח אדמה', image: 'sides/side1.jpeg', options: [{ label: '1 ליטר', price: 35 }, { label: '2 ליטר', price: 70 }] },
             { id: 'side2', name: 'זיתים ברוטב', image: 'sides/side2.jpeg', options: [{ label: '1 ליטר', price: 30 }, { label: '2 ליטר', price: 60 }] },
-            { id: 'side3', name: 'אורז', image: 'sides/side3.jpeg', options: [{ label: '1 ליטר', price: 25 }, { label: '2 ליטר', price: 45 }] },
+            { id: 'side3', name: 'אורז', image: 'sides/side3.avif', options: [{ label: '1 ליטר', price: 25 }, { label: '2 ליטר', price: 45 }] },
         ]
     }
 ];
