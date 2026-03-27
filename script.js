@@ -50,6 +50,7 @@ const MENU_DATA = [
         subtitle: 'מחירים לפי 250 מ״ל / 500 מ״ל',
         items: [
             { id: 's1', name: 'מטבוחה', image: 'salads/matbuha.jpeg', options: [{ label: '250 מ"ל', price: 25 }, { label: '500 מ"ל', price: 40 }] },
+            { id: 's10', name: 'סלט ביצים', image: 'salads/egg.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's2', name: 'חציל בעריסה', image: 'salads/eggplant_arisa.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's3', name: 'תפוח אדמה במיונז', image: 'salads/potato_salad.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's4', name: 'חציל במיונז', image: 'salads/eggplant_mayo.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 25 }] },
@@ -58,7 +59,6 @@ const MENU_DATA = [
             { id: 's7', name: 'כרוב גזר במיונז', image: 'salads/cabbage_carrot_mayo.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's8', name: 'כרוב חמוץ', image: 'salads/cabbage_3.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's9', name: 'סלק אדום', image: 'salads/selek.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
-            { id: 's10', name: 'סלק ביצים', image: 'salads/egg.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's11', name: 'טחינה', image: 'salads/thina.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's12', name: 'סלסה', image: 'salads/salsa.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's13', name: 'גזר חי חריף', image: 'salads/carrot_live.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
