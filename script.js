@@ -265,6 +265,10 @@ function openCustomizationModal(itemId, optionIdx, categoryId) {
     document.getElementById('custom-item-name').textContent = item.name + ' - התאמה אישית';
     const container = document.getElementById('customization-options-container');
     container.innerHTML = '';
+    
+    // Clear notes field
+    const notesInput = document.getElementById('custom-item-notes');
+    if (notesInput) notesInput.value = '';
 
     item.customizationOptions.forEach((opt, idx) => {
         const label = document.createElement('label');
@@ -327,10 +331,18 @@ function addCustomizedToCart() {
     const checkboxes = document.querySelectorAll('input[name="custom-opt"]:checked');
     const selected = Array.from(checkboxes).map(cb => cb.value);
 
+    // Get manual notes
+    const notesInput = document.getElementById('custom-item-notes');
+    const notesValue = notesInput ? notesInput.value.trim() : '';
+
     const { item, option, categoryId, optionIdx } = currentCustomizingItem;
 
     let finalId = `${item.id}-${optionIdx}`;
     let finalCustomizations = [];
+
+    if (notesValue) {
+        finalCustomizations.push(`הערה: ${notesValue}`);
+    }
 
     // Check if user chose "No changes"
     const isStandard = selected.length === 1 && selected[0] === 'ללא שינויים';
@@ -339,15 +351,23 @@ function addCustomizedToCart() {
         // Filter out "No changes" if it somehow stayed
         const filtered = selected.filter(s => s !== 'ללא שינויים');
         if (filtered.length > 0) {
-            const customSuffix = filtered.sort().join('|');
+            const customSuffix = filtered.sort().join('|') + (notesValue ? '|' + notesValue : '');
             const hash = customSuffix.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
             // Add timestamp and random to ensure it's ALWAYS a unique row if it's a new add
             finalId += '-custom-' + Math.abs(hash) + '-' + Date.now();
-            finalCustomizations = filtered;
+            finalCustomizations = [...finalCustomizations, ...filtered];
+        } else if (notesValue) {
+            // No checkboxes but has notes - still need a unique ID
+            const hash = notesValue.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
+            finalId += '-custom-note-' + Math.abs(hash) + '-' + Date.now();
         } else {
             // It was just "No changes" even if filtered
             finalId += '-standard-' + Date.now();
         }
+    } else if (notesValue) {
+         // "No changes" checkbox is checked, but there are notes
+         const hash = notesValue.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
+         finalId += '-custom-note-' + Math.abs(hash) + '-' + Date.now();
     } else {
         // Even for standard, if added from modal, we make it unique so it doesn't "overwrite"
         finalId += '-standard-' + Date.now();
@@ -514,11 +534,18 @@ function setupEventListeners() {
     const closeCustomizationBtn = document.getElementById('close-customization');
     const customModal = document.getElementById('customization-modal');
     const addToCartFromCustomBtn = document.getElementById('add-customized-btn');
+    const cancelCustomizationBtn = document.getElementById('cancel-customization');
 
     closeCustomizationBtn.addEventListener('click', () => {
         customModal.classList.add('hidden');
         currentCustomizingItem = null;
     });
+
+    cancelCustomizationBtn.addEventListener('click', () => {
+        customModal.classList.add('hidden');
+        currentCustomizingItem = null;
+    });
+
 
     customModal.addEventListener('click', (e) => {
         if (e.target === customModal) {
