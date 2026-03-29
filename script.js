@@ -40,7 +40,7 @@ const MENU_DATA = [
             { id: 'main1', name: 'רולדת בשר ורוטב פטריות', image: 'mains/main1.jpeg', options: [{ label: 'רגיל', price: 80 }] },
             { id: 'main2', name: 'פשטידת מחמאר', image: 'mains/main2.jpeg', options: [{ label: 'רגיל', price: 70 }] },
             { id: 'main3', name: 'צלי בשר - יחידה', image: 'mains/main3+4.jpeg', options: [{ label: 'יחידה', price: 30 }] },
-            { id: 'main4', name: 'צלי בשר - 5 יחידות', image: 'mains/main3+4.jpeg', options: [{ label: '5 יחידות', price: 140 }] },
+            { id: 'main4', name: 'צלי בשר - 5 יחידות', image: 'mains/main3+4.jpeg', options: [{ label: '', price: 140 }] },
             { id: 'main5', name: 'מפרום (יחידה)', image: 'mains/main5.jpeg', options: [{ label: 'יחידה', price: 15 }] },
             { id: 'main6', name: 'שניצל (יחידה)', image: 'mains/main6.jpeg', options: [{ label: 'יחידה', price: 15 }] },
             { id: 'main7', name: 'כרע עוף (יחידה)', image: 'mains/main7.jpeg', options: [{ label: 'יחידה', price: 15 }] },
@@ -268,6 +268,10 @@ function openCustomizationModal(itemId, optionIdx, categoryId) {
     document.getElementById('custom-item-name').textContent = item.name + ' - התאמה אישית';
     const container = document.getElementById('customization-options-container');
     container.innerHTML = '';
+    
+    // Clear notes field
+    const notesInput = document.getElementById('custom-item-notes');
+    if (notesInput) notesInput.value = '';
 
     item.customizationOptions.forEach((opt, idx) => {
         const label = document.createElement('label');
@@ -330,6 +334,10 @@ function addCustomizedToCart() {
     const checkboxes = document.querySelectorAll('input[name="custom-opt"]:checked');
     const selected = Array.from(checkboxes).map(cb => cb.value);
 
+    // Get manual notes
+    const notesInput = document.getElementById('custom-item-notes');
+    const notesValue = notesInput ? notesInput.value.trim() : '';
+
     const { item, option, categoryId, optionIdx } = currentCustomizingItem;
 
     let finalId = `${item.id}-${optionIdx}`;
@@ -338,15 +346,16 @@ function addCustomizedToCart() {
     // Check if user chose "No changes"
     const isStandard = selected.length === 1 && selected[0] === 'ללא שינויים';
 
-    if (!isStandard) {
+    if (!isStandard || notesValue) {
         // Filter out "No changes" if it somehow stayed
         const filtered = selected.filter(s => s !== 'ללא שינויים');
-        if (filtered.length > 0) {
-            const customSuffix = filtered.sort().join('|');
+        if (filtered.length > 0 || notesValue) {
+            const customSuffix = filtered.sort().join('|') + (notesValue ? '|' + notesValue : '');
             const hash = customSuffix.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
             // Add timestamp and random to ensure it's ALWAYS a unique row if it's a new add
             finalId += '-custom-' + Math.abs(hash) + '-' + Date.now();
-            finalCustomizations = filtered;
+            finalCustomizations = [...filtered];
+            if (notesValue) finalCustomizations.push(`הערה: ${notesValue}`);
         } else {
             // It was just "No changes" even if filtered
             finalId += '-standard-' + Date.now();
@@ -514,11 +523,14 @@ function setupEventListeners() {
         }
     });
 
-    const closeCustomizationBtn = document.getElementById('close-customization');
-    const customModal = document.getElementById('customization-modal');
-    const addToCartFromCustomBtn = document.getElementById('add-customized-btn');
+    const cancelCustomizationBtn = document.getElementById('cancel-customization');
 
     closeCustomizationBtn.addEventListener('click', () => {
+        customModal.classList.add('hidden');
+        currentCustomizingItem = null;
+    });
+
+    cancelCustomizationBtn.addEventListener('click', () => {
         customModal.classList.add('hidden');
         currentCustomizingItem = null;
     });
