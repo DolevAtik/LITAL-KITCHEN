@@ -807,28 +807,48 @@ h4 {
 .footer-bottom {
     margin-top: 2rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color);
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    padding-bottom: 1.5rem;
+    background-color: #0D0D0D; /* Very dark background */
+    border-top: 1px solid #1A1A1A;
+    font-size: 0.95rem;
+    color: #BBBBBB; /* Lighter text for contrast */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
 }
 
 .footer-bottom p {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+    text-align: center !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
-.linkedin-link {
+.dev-link {
+    color: #D4AF37; /* Gold color */
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.2s;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    color: #0077B5;
-    text-decoration: none;
-    font-weight: 600;
-    transition: opacity 0.2s;
+    gap: 0.4rem;
 }
 
-.linkedin-link:hover {
-    opacity: 0.8;
+.dev-link svg {
+    margin-bottom: -2px;
 }
+
+.dev-link:hover {
+    color: #F9E2AF; /* Lighter gold on hover */
+    transform: translateY(-1px);
+}
+
+
+
 
 /* Customization Modal Styles (Centered Card) */
 #customization-modal {

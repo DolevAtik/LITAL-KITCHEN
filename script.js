@@ -86,7 +86,7 @@ const MENU_DATA = [
         title: 'תוספות',
         icon: '🍚',
         items: [
-            { id: 'side4', name: 'חומוס מרוקאי מבושל', image: 'sides/side4.jpeg', options: [{ label: '1 ליטר', price: 40 }] },
+            { id: 'side4', name: 'חומוס מרוקאי מבושל', image: 'sides/side4.jpeg', options: [{ label: '1 ליטר', price: 40 }, { label: '2 ליטר', price: 80 }] },
             { id: 'side1', name: 'תפוח אדמה', image: 'sides/side1.jpeg', options: [{ label: '1 ליטר', price: 35 }, { label: '2 ליטר', price: 70 }] },
             { id: 'side2', name: 'זיתים ברוטב', image: 'sides/side2.jpeg', options: [{ label: '1 ליטר', price: 30 }, { label: '2 ליטר', price: 60 }] },
             { id: 'side3', name: 'אורז', image: 'sides/side3.avif', options: [{ label: '1 ליטר', price: 25 }, { label: '2 ליטר', price: 45 }] },
@@ -268,7 +268,7 @@ function openCustomizationModal(itemId, optionIdx, categoryId) {
     document.getElementById('custom-item-name').textContent = item.name + ' - התאמה אישית';
     const container = document.getElementById('customization-options-container');
     container.innerHTML = '';
-    
+
     // Clear notes field
     const notesInput = document.getElementById('custom-item-notes');
     if (notesInput) notesInput.value = '';
@@ -524,6 +524,9 @@ function setupEventListeners() {
     });
 
     const cancelCustomizationBtn = document.getElementById('cancel-customization');
+    const closeCustomizationBtn = document.getElementById('close-customization');
+    const customModal = document.getElementById('customization-modal');
+    const addToCartFromCustomBtn = document.getElementById('add-customized-btn');
 
     closeCustomizationBtn.addEventListener('click', () => {
         customModal.classList.add('hidden');
