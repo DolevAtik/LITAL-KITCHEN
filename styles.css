@@ -35,6 +35,10 @@ body {
     scroll-behavior: smooth;
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* Typography */
 h1,
 h2,
