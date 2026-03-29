@@ -24,6 +24,12 @@
     box-sizing: border-box;
 }
 
+.hidden:not(.modal):not(.cart-summary) {
+    display: none !important;
+}
+
+
+
 body {
     font-family: 'Assistant', sans-serif;
     background-color: var(--bg-secondary);

@@ -65,7 +65,7 @@ const MENU_DATA = [
         items: [
             { id: 's1', name: 'מטבוחה', image: 'salads/matbuha.jpeg', options: [{ label: '250 מ"ל', price: 25 }, { label: '500 מ"ל', price: 40 }] },
             { id: 's10', name: 'סלט ביצים', image: 'salads/egg.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
-            { id: 's2', name: 'חציל בעריסה', image: 'salads/eggplant_arisa.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
+            { id: 's2', name: 'חציל באריסה', image: 'salads/eggplant_arisa.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's3', name: 'תפוח אדמה במיונז', image: 'salads/potato_salad.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's4', name: 'חציל במיונז', image: 'salads/eggplant_mayo.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's5', name: 'כרוב אדום', image: 'salads/Cabbage_mayo.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
@@ -176,7 +176,7 @@ function renderMenu() {
             let optionsHtml = '<div class="price-options">';
             item.options.forEach((opt, idx) => {
                 const uniqueId = `${item.id}-${idx}`;
-                
+
                 // Calculate total quantity for this baseId (all versions)
                 let cartQty = 0;
                 Object.entries(cart).forEach(([cartId, cartItem]) => {
@@ -259,33 +259,33 @@ function openCustomizationModal(itemId, optionIdx, categoryId) {
     const item = category.items.find(i => i.id === itemId);
     if (!item) return;
     const option = item.options[optionIdx];
-    
+
     currentCustomizingItem = { item, option, categoryId, optionIdx };
-    
+
     document.getElementById('custom-item-name').textContent = item.name + ' - התאמה אישית';
     const container = document.getElementById('customization-options-container');
     container.innerHTML = '';
-    
+
     item.customizationOptions.forEach((opt, idx) => {
         const label = document.createElement('label');
         label.className = 'custom-option-label';
         const isDefault = opt === 'ללא שינויים';
         if (isDefault) label.classList.add('selected');
-        
+
         label.innerHTML = `
             <input type="checkbox" name="custom-opt" value="${opt}" ${isDefault ? 'checked' : ''} onchange="handleCustomizationChange(this)">
             <span>${opt}</span>
         `;
         container.appendChild(label);
     });
-    
+
     document.getElementById('customization-modal').classList.remove('hidden');
 }
 
 function handleCustomizationChange(checkbox) {
     const checkboxes = document.querySelectorAll('input[name="custom-opt"]');
     const isNoChanges = checkbox.value === 'ללא שינויים';
-    
+
     if (isNoChanges && checkbox.checked) {
         // If checking "No changes", uncheck everything else
         checkboxes.forEach(cb => {
@@ -303,7 +303,7 @@ function handleCustomizationChange(checkbox) {
             }
         });
     }
-    
+
     // Update visual classes for all
     checkboxes.forEach(cb => {
         if (cb.checked) cb.parentElement.classList.add('selected');
@@ -323,18 +323,18 @@ function handleCustomizationChange(checkbox) {
 
 function addCustomizedToCart() {
     if (!currentCustomizingItem) return;
-    
+
     const checkboxes = document.querySelectorAll('input[name="custom-opt"]:checked');
     const selected = Array.from(checkboxes).map(cb => cb.value);
-    
+
     const { item, option, categoryId, optionIdx } = currentCustomizingItem;
-    
+
     let finalId = `${item.id}-${optionIdx}`;
     let finalCustomizations = [];
-    
+
     // Check if user chose "No changes"
     const isStandard = selected.length === 1 && selected[0] === 'ללא שינויים';
-    
+
     if (!isStandard) {
         // Filter out "No changes" if it somehow stayed
         const filtered = selected.filter(s => s !== 'ללא שינויים');
@@ -352,9 +352,9 @@ function addCustomizedToCart() {
         // Even for standard, if added from modal, we make it unique so it doesn't "overwrite"
         finalId += '-standard-' + Date.now();
     }
-    
+
     updateCart(finalId, item.name, option.label, option.price, 1, categoryId, finalCustomizations);
-    
+
     document.getElementById('customization-modal').classList.add('hidden');
     currentCustomizingItem = null;
 }
