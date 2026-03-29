@@ -12,7 +12,21 @@ const MENU_DATA = [
                 options: [{ label: 'משפחתי', price: 170 }],
                 isSpecialDeal: true
             },
-            { id: 'm2', name: 'שניצל בג׳בטה', image: 'dishes/m2.jpeg', description: 'עם מטבוחה, חציל מטוגן, חומוס מבושל, פלפל חריף וחמוצים בצד', options: [{ label: 'רגיל', price: 40 }] },
+            {
+                id: 'm2',
+                name: 'שניצל בג׳בטה',
+                image: 'dishes/m2.jpeg',
+                description: 'עם מטבוחה, חציל מטוגן, חומוס מבושל, פלפל חריף וחמוצים בצד',
+                options: [{ label: 'רגיל', price: 40 }],
+                customizable: true,
+                customizationOptions: [
+                    'ללא שינויים',
+                    'ללא מטבוחה',
+                    'ללא חציל מטוגן',
+                    'ללא חומוס מבושל',
+                    'ללא פלפל חריף'
+                ]
+            },
             { id: 'm3', name: 'מנה קוסקוס עם מפרום / עוף', image: 'dishes/m3.jpeg', options: [{ label: 'רגיל', price: 50 }] },
             { id: 'm4', name: 'מנה קוסקוס צמחוני', image: 'dishes/m4.jpeg', options: [{ label: 'רגיל', price: 40 }] },
             { id: 'm5', name: 'סולת 2 ליטר ', image: 'dishes/m5.jpeg', options: [{ label: 'רגיל', price: 60 }] },
@@ -53,7 +67,7 @@ const MENU_DATA = [
             { id: 's10', name: 'סלט ביצים', image: 'salads/egg.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's2', name: 'חציל בעריסה', image: 'salads/eggplant_arisa.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's3', name: 'תפוח אדמה במיונז', image: 'salads/potato_salad.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
-            { id: 's4', name: 'חציל במיונז', image: 'salads/eggplant_mayo.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 25 }] },
+            { id: 's4', name: 'חציל במיונז', image: 'salads/eggplant_mayo.jpeg', options: [{ label: '250 מ"ל', price: 20 }, { label: '500 מ"ל', price: 30 }] },
             { id: 's5', name: 'כרוב אדום', image: 'salads/Cabbage_mayo.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's6', name: 'כרוב תירס במיונז', image: 'salads/Cabbage_mayo_corn.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
             { id: 's7', name: 'כרוב גזר במיונז', image: 'salads/cabbage_carrot_mayo.jpeg', options: [{ label: '250 מ"ל', price: 15 }, { label: '500 מ"ל', price: 25 }] },
@@ -81,6 +95,7 @@ const MENU_DATA = [
 ];
 
 let cart = {};
+let currentCustomizingItem = null;
 
 function init() {
     renderTabs();
@@ -161,7 +176,15 @@ function renderMenu() {
             let optionsHtml = '<div class="price-options">';
             item.options.forEach((opt, idx) => {
                 const uniqueId = `${item.id}-${idx}`;
-                const cartQty = cart[uniqueId]?.quantity || 0;
+                
+                // Calculate total quantity for this baseId (all versions)
+                let cartQty = 0;
+                Object.entries(cart).forEach(([cartId, cartItem]) => {
+                    const cartBaseId = cartId.split('-custom-')[0].split('-standard-')[0];
+                    if (cartBaseId === uniqueId) {
+                        cartQty += cartItem.quantity;
+                    }
+                });
 
                 const labelDisplay = (opt.label === 'רגיל' || opt.label === 'יחידה' || opt.label === 'משפחתי') ? '' : opt.label;
                 const labelHtml = labelDisplay ? `<span>${labelDisplay}</span>` : '';
@@ -173,12 +196,12 @@ function renderMenu() {
                             <strong>₪${opt.price}</strong>
                         </div>
                         <div class="quantity-control">
-                            <button class="qty-btn" aria-label="Decrease quantity" onclick="updateCart('${uniqueId}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${opt.label.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${opt.price}, -1, '${category.categoryId}')">−</button>
-                            <span class="qty-val" id="qty-${uniqueId}">${cartQty}</span>
-                            <button class="qty-btn" aria-label="Increase quantity" onclick="updateCart('${uniqueId}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${opt.label.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${opt.price}, 1, '${category.categoryId}')">+</button>
-                        </div>
-                    </div>
-                `;
+                             <button class="qty-btn" aria-label="Decrease quantity" onclick="updateCart('${uniqueId}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${opt.label.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${opt.price}, -1, '${category.categoryId}')">−</button>
+                             <span class="qty-val" id="qty-${uniqueId}">${cartQty}</span>
+                             <button class="qty-btn" aria-label="Increase quantity" onclick="${item.customizable ? `openCustomizationModal('${item.id}', ${idx}, '${category.categoryId}')` : `updateCart('${uniqueId}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${opt.label.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${opt.price}, 1, '${category.categoryId}')`}">+</button>
+                         </div>
+                     </div>
+                 `;
             });
             optionsHtml += '</div>';
 
@@ -200,10 +223,10 @@ function renderMenu() {
     });
 }
 
-function updateCart(id, name, optionLabel, price, change, categoryId) {
+function updateCart(id, name, optionLabel, price, change, categoryId, customizations = null) {
     if (!cart[id]) {
         if (change <= 0) return; // Prevent creating an item if we are just subtracting from 0
-        cart[id] = { name, optionLabel, price, quantity: 0, categoryId };
+        cart[id] = { name, optionLabel, price, quantity: 0, categoryId, customizations };
     }
 
     cart[id].quantity += change;
@@ -211,12 +234,129 @@ function updateCart(id, name, optionLabel, price, change, categoryId) {
         delete cart[id];
     }
 
-    const qtyEl = document.getElementById(`qty-${id}`);
+    // Update main menu counter
+    // Find baseId (remove customization/standard uniqueness suffixes)
+    const baseId = id.split('-custom-')[0].split('-standard-')[0];
+    const qtyEl = document.getElementById(`qty-${baseId}`);
     if (qtyEl) {
-        qtyEl.textContent = cart[id] ? cart[id].quantity : 0;
+        // Calculate total quantity for this baseId (all versions)
+        let totalQty = 0;
+        Object.entries(cart).forEach(([cartId, cartItem]) => {
+            const cartBaseId = cartId.split('-custom-')[0].split('-standard-')[0];
+            if (cartBaseId === baseId) {
+                totalQty += cartItem.quantity;
+            }
+        });
+        qtyEl.textContent = totalQty;
     }
 
     updateCartSummary();
+}
+
+function openCustomizationModal(itemId, optionIdx, categoryId) {
+    const category = MENU_DATA.find(cat => cat.categoryId === categoryId);
+    if (!category) return;
+    const item = category.items.find(i => i.id === itemId);
+    if (!item) return;
+    const option = item.options[optionIdx];
+    
+    currentCustomizingItem = { item, option, categoryId, optionIdx };
+    
+    document.getElementById('custom-item-name').textContent = item.name + ' - התאמה אישית';
+    const container = document.getElementById('customization-options-container');
+    container.innerHTML = '';
+    
+    item.customizationOptions.forEach((opt, idx) => {
+        const label = document.createElement('label');
+        label.className = 'custom-option-label';
+        const isDefault = opt === 'ללא שינויים';
+        if (isDefault) label.classList.add('selected');
+        
+        label.innerHTML = `
+            <input type="checkbox" name="custom-opt" value="${opt}" ${isDefault ? 'checked' : ''} onchange="handleCustomizationChange(this)">
+            <span>${opt}</span>
+        `;
+        container.appendChild(label);
+    });
+    
+    document.getElementById('customization-modal').classList.remove('hidden');
+}
+
+function handleCustomizationChange(checkbox) {
+    const checkboxes = document.querySelectorAll('input[name="custom-opt"]');
+    const isNoChanges = checkbox.value === 'ללא שינויים';
+    
+    if (isNoChanges && checkbox.checked) {
+        // If checking "No changes", uncheck everything else
+        checkboxes.forEach(cb => {
+            if (cb.value !== 'ללא שינויים') {
+                cb.checked = false;
+                cb.parentElement.classList.remove('selected');
+            }
+        });
+    } else if (checkbox.checked) {
+        // If checking something else, uncheck "No changes"
+        checkboxes.forEach(cb => {
+            if (cb.value === 'ללא שינויים') {
+                cb.checked = false;
+                cb.parentElement.classList.remove('selected');
+            }
+        });
+    }
+    
+    // Update visual classes for all
+    checkboxes.forEach(cb => {
+        if (cb.checked) cb.parentElement.classList.add('selected');
+        else cb.parentElement.classList.remove('selected');
+    });
+
+    // If everything is unchecked, re-check "No changes"
+    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+    if (!anyChecked) {
+        const defaultCb = Array.from(checkboxes).find(cb => cb.value === 'ללא שינויים');
+        if (defaultCb) {
+            defaultCb.checked = true;
+            defaultCb.parentElement.classList.add('selected');
+        }
+    }
+}
+
+function addCustomizedToCart() {
+    if (!currentCustomizingItem) return;
+    
+    const checkboxes = document.querySelectorAll('input[name="custom-opt"]:checked');
+    const selected = Array.from(checkboxes).map(cb => cb.value);
+    
+    const { item, option, categoryId, optionIdx } = currentCustomizingItem;
+    
+    let finalId = `${item.id}-${optionIdx}`;
+    let finalCustomizations = [];
+    
+    // Check if user chose "No changes"
+    const isStandard = selected.length === 1 && selected[0] === 'ללא שינויים';
+    
+    if (!isStandard) {
+        // Filter out "No changes" if it somehow stayed
+        const filtered = selected.filter(s => s !== 'ללא שינויים');
+        if (filtered.length > 0) {
+            const customSuffix = filtered.sort().join('|');
+            const hash = customSuffix.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
+            // Add timestamp and random to ensure it's ALWAYS a unique row if it's a new add
+            finalId += '-custom-' + Math.abs(hash) + '-' + Date.now();
+            finalCustomizations = filtered;
+        } else {
+            // It was just "No changes" even if filtered
+            finalId += '-standard-' + Date.now();
+        }
+    } else {
+        // Even for standard, if added from modal, we make it unique so it doesn't "overwrite"
+        finalId += '-standard-' + Date.now();
+    }
+    
+    updateCart(finalId, item.name, option.label, option.price, 1, categoryId, finalCustomizations);
+    
+    document.getElementById('customization-modal').classList.add('hidden');
+    currentCustomizingItem = null;
 }
 
 function calculateTotal() {
@@ -325,7 +465,7 @@ function renderCartModal() {
                     ${item.name} 
                     <button class="cart-remove-btn" onclick="updateCart('${id}', '${item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${item.optionLabel.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', ${item.price}, -${item.quantity}, '${item.categoryId}')" title="הסר הכל">&times;</button>
                 </span>
-                <span class="cart-item-opt">${labelText}</span>
+                <span class="cart-item-opt">${labelText}${item.customizations && item.customizations.length > 0 ? `<br><span class="item-customizations-list">${item.customizations.join(', ')}</span>` : ''}</span>
             </div>
             <div class="cart-item-price">
                 <div class="quantity-control modal-qty">
@@ -371,6 +511,24 @@ function setupEventListeners() {
         }
     });
 
+    const closeCustomizationBtn = document.getElementById('close-customization');
+    const customModal = document.getElementById('customization-modal');
+    const addToCartFromCustomBtn = document.getElementById('add-customized-btn');
+
+    closeCustomizationBtn.addEventListener('click', () => {
+        customModal.classList.add('hidden');
+        currentCustomizingItem = null;
+    });
+
+    customModal.addEventListener('click', (e) => {
+        if (e.target === customModal) {
+            customModal.classList.add('hidden');
+            currentCustomizingItem = null;
+        }
+    });
+
+    addToCartFromCustomBtn.addEventListener('click', addCustomizedToCart);
+
     // Handle date validation
     dateInput.addEventListener('input', (e) => {
         if (!e.target.value) return;
@@ -411,7 +569,8 @@ function setupEventListeners() {
 
         Object.values(cart).forEach(item => {
             const labelText = (item.optionLabel === 'רגיל' || item.optionLabel === 'יחידה' || item.optionLabel === 'משפחתי') ? '' : ` (${item.optionLabel})`;
-            message += `• ${item.quantity}x ${item.name}${labelText}\n`;
+            const custText = item.customizations && item.customizations.length > 0 ? `\n   ┗ ${item.customizations.join(', ')}` : '';
+            message += `• ${item.quantity}x ${item.name}${labelText}${custText}\n`;
         });
 
         const total = calculateTotal();

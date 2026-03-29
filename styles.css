@@ -703,3 +703,93 @@ h1, h2, h3, h4 {
     font-weight: 700;
     color: var(--text-main);
 }
+
+/* Customization Modal Styles */
+.customization-modal-content {
+    max-width: 400px;
+    height: auto;
+    max-height: 90vh;
+    align-self: center;
+    margin: auto;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.p-1-5 {
+    padding: 1.5rem;
+}
+
+.customization-subtitle {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.customization-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.custom-option-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+}
+
+.custom-option-label:hover {
+    background-color: #f9f9f9;
+}
+
+.custom-option-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--accent-red);
+}
+
+.custom-option-label.selected {
+    border-color: var(--accent-red);
+    background-color: #fffafa;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .customization-modal-content {
+        width: 90%;
+        max-width: none;
+    }
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.customize-btn {
+    color: var(--accent-red) !important;
+    background-color: #fffaca !important;
+    border: 1px solid #ffeeba !important;
+}
+
+.customize-btn:hover {
+    background-color: #fff3c4 !important;
+}
