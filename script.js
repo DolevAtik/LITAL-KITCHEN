@@ -173,7 +173,7 @@ function renderMenu() {
                 itemEl.classList.add('special-deal-card');
             }
 
-            let imageHtml = item.image ? `<img src="${item.image}" class="item-image" alt="${item.name}" onerror="this.style.display='none'">` : '';
+            let imageHtml = item.image ? `<img src="${item.image}" class="item-image" alt="${item.name}" loading="lazy" onerror="this.style.display='none'">` : '';
             let descriptionHtml = item.description ? `<p class="item-description">${item.description}</p>` : '';
 
             let optionsHtml = '<div class="price-options">';
