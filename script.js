@@ -559,9 +559,14 @@ function setupEventListeners() {
         const day = dateObj.getDay();
         // 2 is Tuesday, 5 is Friday
         if (day !== 2 && day !== 5) {
-            e.target.value = '';
+            // Reset to next valid date instead of clearing (avoids greyed-out look)
+            let nextValid = new Date(dateObj);
+            for (let i = 1; i <= 7; i++) {
+                nextValid.setDate(nextValid.getDate() + 1);
+                if (nextValid.getDay() === 2 || nextValid.getDay() === 5) break;
+            }
+            e.target.valueAsDate = nextValid;
             dateError.classList.remove('hidden');
-            setTimeout(() => dateError.classList.add('hidden'), 3500);
         } else {
             dateError.classList.add('hidden');
         }
