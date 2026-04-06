@@ -30,9 +30,8 @@ body {
     color: var(--text-main);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    -webkit-overflow-scrolling: touch; /* Improved inertia scrolling on iOS */
-    overflow-x: hidden; /* Prevent horizontal jitters */
-    scroll-behavior: smooth;
+    overflow-x: hidden;
+    /* Prevent horizontal jitters */
 }
 
 .hidden {
@@ -98,7 +97,7 @@ h4 {
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-md);
     font-size: 1.15rem;
-    animation: pulse 2s infinite;
+    animation: pulse 2s ease-in-out 3;
 }
 
 .banner-content {
@@ -188,7 +187,6 @@ h4 {
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
     animation: fadeIn 0.3s ease-out;
-    will-change: transform, opacity; /* GPU acceleration */
 }
 
 .category-section.active {
@@ -254,8 +252,61 @@ h4 {
     }
 
     /* Simplify shadows on mobile for performance */
-    .category-section, .menu-item, .cart-summary {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    .category-section,
+    .menu-item,
+    .cart-summary {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    /* Larger touch-friendly quantity buttons on mobile */
+    .qty-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+    }
+
+    .qty-val {
+        width: 30px;
+        font-size: 1.1rem;
+    }
+
+    .quantity-control {
+        border-radius: 28px;
+    }
+
+    /* Stack price pill vertically on very small screens */
+    .price-pill {
+        flex-wrap: wrap;
+        padding: 0.6rem 0.5rem;
+        gap: 0.4rem;
+        justify-content: center;
+    }
+
+    .price-info {
+        width: 100%;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .price-info span {
+        font-size: 0.85rem;
+    }
+
+    .price-info strong {
+        font-size: 1rem;
+    }
+
+    .quantity-control {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .price-options {
+        gap: 0.6rem;
+    }
+
+    .category-section {
+        padding: 1rem;
     }
 }
 
@@ -277,7 +328,6 @@ h4 {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    will-change: transform, opacity; /* GPU optimization */
 }
 
 .item-image {
@@ -285,13 +335,15 @@ h4 {
     height: 150px;
     object-fit: cover;
     border-bottom: 1px solid var(--border-color);
-    aspect-ratio: 16 / 9; /* Prevent layout shifts */
+    aspect-ratio: 16 / 9;
+    /* Prevent layout shifts */
 }
 
 @media(max-width: 480px) {
     .item-image {
         height: 120px;
     }
+
     .grid-single .item-image {
         height: 180px;
     }
@@ -307,16 +359,32 @@ h4 {
 
 @media(max-width: 480px) {
     .item-details {
-        padding: 0.5rem;
+        padding: 0.6rem;
+    }
+}
+
+/* Tablet improvements */
+@media(min-width: 481px) and (max-width: 767px) {
+    .qty-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.4rem;
+    }
+
+    .qty-val {
+        width: 30px;
+        font-size: 1.05rem;
     }
 }
 
 
-.menu-item:hover {
-    background-color: var(--bg-secondary);
-    border-color: #e0d0c0;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
+@media(hover: hover) {
+    .menu-item:hover {
+        background-color: var(--bg-secondary);
+        border-color: #e0d0c0;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+    }
 }
 
 .item-header {
@@ -370,12 +438,15 @@ h4 {
     border-radius: var(--radius-md);
     padding: 0.5rem 0.75rem;
     font-size: 0.95rem;
+    gap: 0.5rem;
 }
 
 .price-info {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex-shrink: 1;
+    min-width: 0;
 }
 
 .price-info span {
@@ -386,6 +457,7 @@ h4 {
 .price-info strong {
     color: var(--accent-red);
     font-size: 1.05rem;
+    white-space: nowrap;
 }
 
 /* Special Deal Card Customizations */
@@ -397,8 +469,10 @@ h4 {
     transform: scale(1.02);
 }
 
-.menu-item.special-deal-card:hover {
-    transform: scale(1.04);
+@media(hover: hover) {
+    .menu-item.special-deal-card:hover {
+        transform: scale(1.04);
+    }
 }
 
 .menu-item.special-deal-card .item-name,
@@ -435,26 +509,35 @@ h4 {
     align-items: center;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 20px;
+    border-radius: 24px;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .qty-btn {
     background: none;
     border: none;
-    width: 32px;
-    height: 32px;
-    font-size: 1.25rem;
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
     color: var(--text-main);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.1s;
+    transition: background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
 }
 
 .qty-btn:hover {
     background: #e0e0e0;
+}
+
+.qty-btn:active {
+    background: #d0d0d0;
+    transform: scale(0.92);
 }
 
 .qty-val {
@@ -611,7 +694,8 @@ h4 {
 .modal-header {
     padding: 1.5rem;
     border-bottom: 1px solid var(--border-color);
-    position: relative; /* For absolute X */
+    position: relative;
+    /* For absolute X */
 }
 
 .modal-header h2 {
@@ -829,10 +913,12 @@ h4 {
     margin-top: 2rem;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
-    background-color: #0D0D0D; /* Very dark background */
+    background-color: #0D0D0D;
+    /* Very dark background */
     border-top: 1px solid #1A1A1A;
     font-size: 0.95rem;
-    color: #BBBBBB; /* Lighter text for contrast */
+    color: #BBBBBB;
+    /* Lighter text for contrast */
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -850,7 +936,8 @@ h4 {
 }
 
 .dev-link {
-    color: #D4AF37; /* Gold color */
+    color: #D4AF37;
+    /* Gold color */
     text-decoration: none;
     font-weight: 700;
     transition: all 0.2s;
@@ -864,7 +951,8 @@ h4 {
 }
 
 .dev-link:hover {
-    color: #F9E2AF; /* Lighter gold on hover */
+    color: #F9E2AF;
+    /* Lighter gold on hover */
     transform: translateY(-1px);
 }
 
