@@ -811,6 +811,34 @@ h4 {
     font-size: 1rem;
 }
 
+.date-error-msg {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: #fff0f0;
+    border: 1px solid #ffcdd2;
+    border-radius: var(--radius-md);
+    color: #c62828;
+    font-size: 0.9rem;
+    font-weight: 600;
+    animation: shakeError 0.4s ease;
+}
+
+@keyframes shakeError {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-6px);
+    }
+
+    75% {
+        transform: translateX(6px);
+    }
+}
+
 .radio-group {
     display: flex;
     gap: 1rem;

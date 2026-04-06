@@ -549,14 +549,21 @@ function setupEventListeners() {
 
     // Handle date validation
     dateInput.addEventListener('input', (e) => {
-        if (!e.target.value) return;
+        const dateError = document.getElementById('date-error');
+        if (!e.target.value) {
+            dateError.classList.add('hidden');
+            return;
+        }
 
         const dateObj = new Date(e.target.value);
         const day = dateObj.getDay();
         // 2 is Tuesday, 5 is Friday
         if (day !== 2 && day !== 5) {
-            alert('הזמנות אפשריות לימי שלישי ושישי בלבד.');
             e.target.value = '';
+            dateError.classList.remove('hidden');
+            setTimeout(() => dateError.classList.add('hidden'), 3500);
+        } else {
+            dateError.classList.add('hidden');
         }
     });
 
