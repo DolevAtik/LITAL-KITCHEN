@@ -31,10 +31,10 @@ const MENU_DATA = [
                     'ללא פלפל חריף'
                 ]
             },
-            { 
-                id: 'm3', 
-                name: 'מנה קוסקוס עם מפרום / עוף', 
-                image: 'dishes/m3.jpeg', 
+            {
+                id: 'm3',
+                name: 'מנה קוסקוס עם מפרום / עוף',
+                image: 'dishes/m3.jpeg',
                 options: [{ label: 'רגיל', price: 50 }],
                 customizable: true,
                 customizationType: 'quantity-limit',
@@ -307,7 +307,7 @@ function openCustomizationModal(itemId, optionIdx, categoryId) {
             `;
             container.appendChild(row);
         });
-        
+
         const info = document.createElement('div');
         info.id = 'custom-limit-info';
         info.className = 'custom-limit-info';
@@ -339,7 +339,7 @@ function updateCustomQty(option, change) {
     if (!currentCustomizingItem) return;
     const { item, selections } = currentCustomizingItem;
     const currentTotal = Object.values(selections).reduce((a, b) => a + b, 0);
-    
+
     if (change > 0 && currentTotal >= item.customizationLimit) return;
     if (change < 0 && selections[option] <= 0) return;
 
@@ -349,7 +349,7 @@ function updateCustomQty(option, change) {
     const newTotal = Object.values(selections).reduce((a, b) => a + b, 0);
     const info = document.getElementById('custom-limit-info');
     info.textContent = `נשאר לבחור: ${item.customizationLimit - newTotal}`;
-    
+
     const addToCartBtn = document.getElementById('add-customized-btn');
     addToCartBtn.disabled = (newTotal !== item.customizationLimit);
 }
@@ -673,7 +673,7 @@ function setupEventListeners() {
 
         const formattedDate = new Date(date).toLocaleDateString('he-IL');
 
-        let message = `*שם מלא:* ${name}\n`;
+        let message = `*שם:* ${name}\n`;
         message += `*שלום ליטל, אשמח להזמין:* 👩‍🍳\n\n`;
 
         Object.values(cart).forEach(item => {
