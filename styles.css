@@ -1094,3 +1094,31 @@ h4 {
     border-color: var(--accent-red);
     box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.1);
 }
+
+.custom-qty-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: white;
+}
+
+.custom-limit-info {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 700;
+    color: var(--accent-red);
+    background: #fffafa;
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--accent-red);
+}
+
+#add-customized-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+    transform: none !important;
+}

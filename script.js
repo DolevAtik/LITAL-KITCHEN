@@ -10,7 +10,11 @@ const MENU_DATA = [
                 image: 'dishes/m1.png',
                 description: 'כולל: 2 ליטר קוסקוס, 2 ליטר מרק, 4 מפרום / עוף לבחירה, חמוצים ומטבוחה בצד',
                 options: [{ label: 'משפחתי', price: 170 }],
-                isSpecialDeal: true
+                isSpecialDeal: true,
+                customizable: true,
+                customizationType: 'quantity-limit',
+                customizationLimit: 4,
+                customizationOptions: ['מפרום', 'עוף']
             },
             {
                 id: 'm2',
@@ -27,7 +31,16 @@ const MENU_DATA = [
                     'ללא פלפל חריף'
                 ]
             },
-            { id: 'm3', name: 'מנה קוסקוס עם מפרום / עוף', image: 'dishes/m3.jpeg', options: [{ label: 'רגיל', price: 50 }] },
+            { 
+                id: 'm3', 
+                name: 'מנה קוסקוס עם מפרום / עוף', 
+                image: 'dishes/m3.jpeg', 
+                options: [{ label: 'רגיל', price: 50 }],
+                customizable: true,
+                customizationType: 'quantity-limit',
+                customizationLimit: 1,
+                customizationOptions: ['מפרום', 'עוף']
+            },
             { id: 'm4', name: 'מנה קוסקוס צמחוני', image: 'dishes/m4.jpeg', options: [{ label: 'רגיל', price: 40 }] },
             { id: 'm5', name: 'סולת 2 ליטר ', image: 'dishes/m5.jpeg', options: [{ label: 'רגיל', price: 60 }] },
         ]
@@ -263,30 +276,82 @@ function openCustomizationModal(itemId, optionIdx, categoryId) {
     if (!item) return;
     const option = item.options[optionIdx];
 
-    currentCustomizingItem = { item, option, categoryId, optionIdx };
+    currentCustomizingItem = { item, option, categoryId, optionIdx, selections: {} };
 
     document.getElementById('custom-item-name').textContent = item.name + ' - התאמה אישית';
     const container = document.getElementById('customization-options-container');
     container.innerHTML = '';
 
+    const subtitleEl = document.querySelector('.customization-subtitle');
+    const addToCartBtn = document.getElementById('add-customized-btn');
+
     // Clear notes field
     const notesInput = document.getElementById('custom-item-notes');
     if (notesInput) notesInput.value = '';
 
-    item.customizationOptions.forEach((opt, idx) => {
-        const label = document.createElement('label');
-        label.className = 'custom-option-label';
-        const isDefault = opt === 'ללא שינויים';
-        if (isDefault) label.classList.add('selected');
+    if (item.customizationType === 'quantity-limit') {
+        subtitleEl.textContent = `בחר ${item.customizationLimit} עיקריות (מפרום / עוף):`;
+        addToCartBtn.disabled = true;
 
-        label.innerHTML = `
-            <input type="checkbox" name="custom-opt" value="${opt}" ${isDefault ? 'checked' : ''} onchange="handleCustomizationChange(this)">
-            <span>${opt}</span>
-        `;
-        container.appendChild(label);
-    });
+        item.customizationOptions.forEach(opt => {
+            currentCustomizingItem.selections[opt] = 0;
+            const row = document.createElement('div');
+            row.className = 'custom-qty-row';
+            row.innerHTML = `
+                <span>${opt}</span>
+                <div class="quantity-control">
+                    <button class="qty-btn" onclick="updateCustomQty('${opt}', -1)">−</button>
+                    <span class="qty-val" id="custom-qty-${opt}">0</span>
+                    <button class="qty-btn" onclick="updateCustomQty('${opt}', 1)">+</button>
+                </div>
+            `;
+            container.appendChild(row);
+        });
+        
+        const info = document.createElement('div');
+        info.id = 'custom-limit-info';
+        info.className = 'custom-limit-info';
+        info.textContent = `נשאר לבחור: ${item.customizationLimit}`;
+        container.appendChild(info);
+
+    } else {
+        subtitleEl.textContent = 'מה להוריד מהמנה?';
+        addToCartBtn.disabled = false;
+
+        item.customizationOptions.forEach((opt, idx) => {
+            const label = document.createElement('label');
+            label.className = 'custom-option-label';
+            const isDefault = opt === 'ללא שינויים';
+            if (isDefault) label.classList.add('selected');
+
+            label.innerHTML = `
+                <input type="checkbox" name="custom-opt" value="${opt}" ${isDefault ? 'checked' : ''} onchange="handleCustomizationChange(this)">
+                <span>${opt}</span>
+            `;
+            container.appendChild(label);
+        });
+    }
 
     document.getElementById('customization-modal').classList.remove('hidden');
+}
+
+function updateCustomQty(option, change) {
+    if (!currentCustomizingItem) return;
+    const { item, selections } = currentCustomizingItem;
+    const currentTotal = Object.values(selections).reduce((a, b) => a + b, 0);
+    
+    if (change > 0 && currentTotal >= item.customizationLimit) return;
+    if (change < 0 && selections[option] <= 0) return;
+
+    selections[option] += change;
+    document.getElementById(`custom-qty-${option}`).textContent = selections[option];
+
+    const newTotal = Object.values(selections).reduce((a, b) => a + b, 0);
+    const info = document.getElementById('custom-limit-info');
+    info.textContent = `נשאר לבחור: ${item.customizationLimit - newTotal}`;
+    
+    const addToCartBtn = document.getElementById('add-customized-btn');
+    addToCartBtn.disabled = (newTotal !== item.customizationLimit);
 }
 
 function handleCustomizationChange(checkbox) {
@@ -331,20 +396,27 @@ function handleCustomizationChange(checkbox) {
 function addCustomizedToCart() {
     if (!currentCustomizingItem) return;
 
-    const checkboxes = document.querySelectorAll('input[name="custom-opt"]:checked');
-    const selected = Array.from(checkboxes).map(cb => cb.value);
+    const { item, option, categoryId, optionIdx, selections } = currentCustomizingItem;
+    let selected = [];
+
+    if (item.customizationType === 'quantity-limit') {
+        Object.entries(selections).forEach(([opt, qty]) => {
+            if (qty > 0) selected.push(`${qty}x ${opt}`);
+        });
+    } else {
+        const checkboxes = document.querySelectorAll('input[name="custom-opt"]:checked');
+        selected = Array.from(checkboxes).map(cb => cb.value);
+    }
 
     // Get manual notes
     const notesInput = document.getElementById('custom-item-notes');
     const notesValue = notesInput ? notesInput.value.trim() : '';
 
-    const { item, option, categoryId, optionIdx } = currentCustomizingItem;
-
     let finalId = `${item.id}-${optionIdx}`;
     let finalCustomizations = [];
 
     // Check if user chose "No changes"
-    const isStandard = selected.length === 1 && selected[0] === 'ללא שינויים';
+    const isStandard = item.customizationType !== 'quantity-limit' && selected.length === 1 && selected[0] === 'ללא שינויים';
 
     if (!isStandard || notesValue) {
         // Filter out "No changes" if it somehow stayed
@@ -585,8 +657,14 @@ function setupEventListeners() {
     }
 
     checkoutBtn.addEventListener('click', () => {
+        const name = document.getElementById('customer-name').value.trim();
         const date = dateInput.value;
         const deliveryType = document.querySelector('input[name="delivery"]:checked').value;
+
+        if (!name) {
+            alert('אנא הכנס שם מלא');
+            return;
+        }
 
         if (!date) {
             alert('אנא בחר תאריך יום שלישי או שישי להזמנה');
@@ -595,7 +673,8 @@ function setupEventListeners() {
 
         const formattedDate = new Date(date).toLocaleDateString('he-IL');
 
-        let message = `*שלום ליטל, אשמח להזמין:* 👩‍🍳\n\n`;
+        let message = `*שם מלא:* ${name}\n`;
+        message += `*שלום ליטל, אשמח להזמין:* 👩‍🍳\n\n`;
 
         Object.values(cart).forEach(item => {
             const labelText = (item.optionLabel === 'רגיל' || item.optionLabel === 'יחידה' || item.optionLabel === 'משפחתי') ? '' : ` (${item.optionLabel})`;
