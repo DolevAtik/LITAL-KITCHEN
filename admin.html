@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פאנל ניהול - המטבח של ליטל</title>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content" style="padding: 1rem 0;">
+            <h1>פאנל ניהול מוצרים</h1>
+            <a href="index.html" class="btn btn-secondary" style="margin-top: 10px;">חזרה לאתר</a>
+        </div>
+    </header>
+
+    <main class="admin-container" id="admin-main" style="display: none;">
+        
+        <section class="admin-card">
+            <h2>הוספת / עריכת מוצר</h2>
+            <form id="product-form" class="admin-form">
+                <input type="hidden" id="edit-id">
+                
+                <div class="form-group">
+                    <label>שם המנה:</label>
+                    <input type="text" id="p-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>קטגוריה:</label>
+                    <select id="p-category" required>
+                        <option value="dishes">מנות</option>
+                        <option value="mains">בשר / עוף</option>
+                        <option value="fish">דגים</option>
+                        <option value="salads">סלטים</option>
+                        <option value="sides">תוספות</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>תמונה (ניתן להעלות קובץ או להכניס קישור):</label>
+                    <div style="display:flex; gap: 10px; align-items:center; flex-wrap: wrap;">
+                        <input type="file" id="p-image-file" accept="image/png, image/jpeg, image/webp" style="flex:1; min-width: 200px;">
+                        <span>או</span>
+                        <input type="text" id="p-image-url" placeholder="לדוגמה: URL או נתיב" style="flex:1; min-width: 200px;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>תיאור (לא חובה):</label>
+                    <textarea id="p-description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>דיל מיוחד (Special Deal)?</label>
+                    <input type="checkbox" id="p-special">
+                </div>
+
+                <hr>
+                <h3>אפשרויות ומחירים</h3>
+                <div id="options-container"></div>
+                <button type="button" class="btn btn-secondary" id="add-option-btn">+ הוסף אופציית מחיר</button>
+
+                <hr>
+                <h3>התאמה אישית (Customizations)</h3>
+                <div class="form-group">
+                    <label>האם ניתן להתאמה?</label>
+                    <input type="checkbox" id="p-customizable">
+                </div>
+                
+                <div id="customization-settings" style="display:none; border:1px solid #ddd; padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                    <div class="form-group">
+                        <label>סוג התאמה:</label>
+                        <select id="p-custom-type">
+                            <option value="">רגיל (בחירת מרובה עם "ללא שינויים")</option>
+                            <option value="quantity-limit">הגבלת כמות (לדוגמה לבחור 4 תוספות)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="limit-group" style="display:none;">
+                        <label>כמות לבחירה:</label>
+                        <input type="number" id="p-custom-limit">
+                    </div>
+                    <div class="form-group">
+                        <label>אפשרויות התאמה אישית (לכתוב מופרד בפסיקים):</label>
+                        <input type="text" id="p-custom-options" placeholder="ללא שינויים, ללא מטבוחה, ללא פלפל">
+                    </div>
+                </div>
+
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" id="save-btn">שמור מוצר במערכת</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-edit" style="display:none;">ביטול עריכה</button>
+                    <div id="save-loader" class="spinner" style="display: none; margin-right: 10px; width: 20px; height: 20px;"></div>
+                </div>
+            </form>
+        </section>
+
+        <section class="admin-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>רשימת המוצרים במסד הנתונים</h2>
+                <button id="import-btn" class="btn btn-secondary" style="background:#e8f4f8; color:#0e7ca1;">ייבוא חד פעמי (סקריפט הגירה)</button>
+            </div>
+            
+            <div id="products-list-loader" class="spinner" style="display:none; margin: 20px auto;"></div>
+            
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>שם</th>
+                        <th>קטגוריה</th>
+                        <th>מחירים</th>
+                        <th>פעולות</th>
+                    </tr>
+                </thead>
+                <tbody id="products-tbody"></tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <!-- Old data for migration tool -->
+    <script src="old_data_backup.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
