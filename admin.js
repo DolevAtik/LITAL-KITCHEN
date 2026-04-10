@@ -23,13 +23,13 @@ let productsList = [];
 
 async function loadProducts() {
     document.getElementById('products-list-loader').style.display = 'block';
-    
+
     const { data, error } = await supabaseClient
         .from('products')
         .select('*')
         .order('category_id')
         .order('name');
-        
+
     document.getElementById('products-list-loader').style.display = 'none';
 
     if (error) {
@@ -37,7 +37,7 @@ async function loadProducts() {
         alert("שגיאה בטעינת המוצרים");
         return;
     }
-    
+
     productsList = data;
     renderProductsTable();
 }
@@ -45,12 +45,12 @@ async function loadProducts() {
 function renderProductsTable() {
     const tbody = document.getElementById('products-tbody');
     tbody.innerHTML = '';
-    
+
     productsList.forEach(p => {
         const tr = document.createElement('tr');
-        
+
         let pricesStr = (p.options || []).map(o => `${o.label}: ₪${o.price}`).join(', ');
-        
+
         tr.innerHTML = `
             <td>${p.name} ${p.is_special_deal ? '(מבצע)' : ''}</td>
             <td>${p.category_id}</td>
@@ -91,44 +91,44 @@ document.getElementById('p-custom-type').addEventListener('change', (e) => {
 // Form Submit
 document.getElementById('product-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const saveBtn = document.getElementById('save-btn');
     const loader = document.getElementById('save-loader');
-    
+
     saveBtn.disabled = true;
     loader.style.display = 'inline-block';
-    
+
     // Build options
     const optLabels = document.querySelectorAll('.opt-label');
     const optPrices = document.querySelectorAll('.opt-price');
     const options = [];
-    for(let i=0; i<optLabels.length; i++) {
+    for (let i = 0; i < optLabels.length; i++) {
         options.push({
             label: optLabels[i].value,
             price: Number(optPrices[i].value)
         });
     }
-    
+
     // Customization
     let customOpts = [];
     const customOptsStr = document.getElementById('p-custom-options').value;
-    if(customOptsStr) {
+    if (customOptsStr) {
         customOpts = customOptsStr.split(',').map(s => s.trim()).filter(s => s);
     }
-    
+
     // Image handling
     let finalImageUrl = document.getElementById('p-image-url').value || null;
     const fileInput = document.getElementById('p-image-file');
-    
+
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-        
+
         const { data, error: uploadError } = await supabaseClient.storage
             .from('product-images')
             .upload(fileName, file);
-            
+
         if (uploadError) {
             alert("שגיאה בהעלאת התמונה! ודא שיש ב-Supabase ב-Storage באקט בשם 'product-images' עם הרשאת Public/Insert");
             console.error("Upload error:", uploadError);
@@ -136,7 +136,7 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
             loader.style.display = 'none';
             return;
         }
-        
+
         const { data: publicUrlData } = supabaseClient.storage.from('product-images').getPublicUrl(fileName);
         finalImageUrl = publicUrlData.publicUrl;
     }
@@ -153,9 +153,9 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
         customization_limit: document.getElementById('p-custom-limit').value ? Number(document.getElementById('p-custom-limit').value) : null,
         customization_options: customOpts.length > 0 ? customOpts : null
     };
-    
+
     const editId = document.getElementById('edit-id').value;
-    
+
     if (editId) {
         // Update
         const { error } = await supabaseClient.from('products').update(productData).eq('id', editId);
@@ -167,15 +167,15 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
         if (error) { alert("שגיאה ביצירה"); console.error(error); }
         else { alert("נוצר בהצלחה!"); resetForm(); loadProducts(); }
     }
-    
+
     saveBtn.disabled = false;
     loader.style.display = 'none';
 });
 
 function editProduct(id) {
     const p = productsList.find(x => x.id === id);
-    if(!p) return;
-    
+    if (!p) return;
+
     document.getElementById('edit-id').value = p.id;
     document.getElementById('p-name').value = p.name;
     document.getElementById('p-category').value = p.category_id;
@@ -183,21 +183,21 @@ function editProduct(id) {
     document.getElementById('p-image-file').value = '';
     document.getElementById('p-description').value = p.description || '';
     document.getElementById('p-special').checked = p.is_special_deal || false;
-    
+
     optionsContainer.innerHTML = '';
     (p.options || []).forEach(o => createOptionRow(o.label, o.price));
-    
+
     document.getElementById('p-customizable').checked = p.customizable || false;
     document.getElementById('customization-settings').style.display = p.customizable ? 'block' : 'none';
-    
+
     document.getElementById('p-custom-type').value = p.customization_type || '';
     document.getElementById('limit-group').style.display = p.customization_type === 'quantity-limit' ? 'block' : 'none';
     document.getElementById('p-custom-limit').value = p.customization_limit || '';
     document.getElementById('p-custom-options').value = (p.customization_options || []).join(', ');
-    
+
     document.getElementById('save-btn').textContent = 'עדכן מוצר';
     document.getElementById('cancel-edit').style.display = 'inline-block';
-    
+
     window.scrollTo(0, 0);
 }
 
@@ -215,18 +215,18 @@ function resetForm() {
 }
 
 async function deleteProduct(id) {
-    if(confirm("בטוח שברצונך למחוק מוצר זה?")) {
+    if (confirm("בטוח שברצונך למחוק מוצר זה?")) {
         const { error } = await supabaseClient.from('products').delete().eq('id', id);
-        if(!error) loadProducts();
+        if (!error) loadProducts();
         else alert("שגיאה במחיקה");
     }
 }
 
 // MIGRATION SCRIPT
 document.getElementById('import-btn').addEventListener('click', async () => {
-    if(confirm("פעולה זו תשפוך את כל המוצרים הקיימים הישנים בקובץ הגיבוי אל תוך סופהבייס. האם להמשיך? (מומלץ לבצע רק פעם אחת!)")) {
+    if (confirm("פעולה זו תשפוך את כל המוצרים הקיימים הישנים בקובץ הגיבוי אל תוך סופהבייס. האם להמשיך? (מומלץ לבצע רק פעם אחת!)")) {
         const productsToInsert = [];
-        
+
         OLD_MENU_DATA.forEach(cat => {
             cat.items.forEach(item => {
                 productsToInsert.push({
@@ -243,17 +243,17 @@ document.getElementById('import-btn').addEventListener('click', async () => {
                 });
             });
         });
-        
+
         try {
             const { error } = await supabaseClient.from('products').insert(productsToInsert);
-            if(error) {
+            if (error) {
                 console.error("Migration error:", error);
                 alert("שגיאה בייבוא הנתונים.");
             } else {
                 alert("כל המוצרים יובאו בהצלחה!");
                 loadProducts();
             }
-        } catch(err) {
+        } catch (err) {
             console.error("Migration fatal error", err);
         }
     }
