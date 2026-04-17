@@ -394,7 +394,8 @@ function calculateTotal() {
         }
     });
 
-    salads250Items.sort((a, b) => b.price - a.price);
+    // Sort ascending so the cheapest salads go into the deal
+    salads250Items.sort((a, b) => a.price - b.price);
 
     const groupsOf6 = Math.floor(salads250Items.length / 6);
     total += groupsOf6 * 100;
