@@ -27,3 +27,15 @@ CREATE POLICY "Public profiles are viewable by everyone"
 CREATE POLICY "Enable insert for all users" ON public.products FOR INSERT WITH CHECK (true);
 CREATE POLICY "Enable update for all users" ON public.products FOR UPDATE USING (true);
 CREATE POLICY "Enable delete for all users" ON public.products FOR DELETE USING (true);
+
+-- Create open_dates table
+CREATE TABLE public.open_dates (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  date_string text NOT NULL UNIQUE
+);
+
+ALTER TABLE public.open_dates ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public profiles are viewable by everyone" ON public.open_dates FOR SELECT USING (true);
+CREATE POLICY "Enable insert for all users" ON public.open_dates FOR INSERT WITH CHECK (true);
+CREATE POLICY "Enable update for all users" ON public.open_dates FOR UPDATE USING (true);
+CREATE POLICY "Enable delete for all users" ON public.open_dates FOR DELETE USING (true);

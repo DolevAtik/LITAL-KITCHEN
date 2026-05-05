@@ -10,12 +10,26 @@ let MENU_DATA = [];
 
 let cart = {};
 let currentCustomizingItem = null;
+let openDates = [];
+
+function getLocalISODate(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+}
 
 async function init() {
     const spinner = document.getElementById('loading-spinner');
     if(spinner) spinner.style.display = 'block';
 
     try {
+        // Fetch open dates
+        const { data: dateData } = await supabaseClient.from('open_dates').select('date_string');
+        if (dateData) {
+            openDates = dateData.map(d => d.date_string);
+        }
+
         const { data, error } = await supabaseClient
             .from('products')
             .select('*')
@@ -565,29 +579,46 @@ function setupEventListeners() {
             return;
         }
 
-        const dateObj = new Date(e.target.value);
+        const [y, m, d] = e.target.value.split('-').map(Number);
+        const dateObj = new Date(y, m - 1, d);
         const day = dateObj.getDay();
+        const dateString = e.target.value;
+        
         // 2 is Tuesday, 5 is Friday
-        if (day !== 2 && day !== 5) {
+        const isAllowedDay = (day === 2 || day === 5);
+        const isOpenDate = openDates.includes(dateString);
+
+        if (!isAllowedDay && !isOpenDate) {
             // Reset to next valid date instead of clearing (avoids greyed-out look)
             let nextValid = new Date(dateObj);
-            for (let i = 1; i <= 7; i++) {
+            let foundValid = false;
+            for (let i = 1; i <= 30; i++) {
                 nextValid.setDate(nextValid.getDate() + 1);
-                if (nextValid.getDay() === 2 || nextValid.getDay() === 5) break;
+                const nday = nextValid.getDay();
+                const nstr = getLocalISODate(nextValid);
+                if (nday === 2 || nday === 5 || openDates.includes(nstr)) {
+                    foundValid = true;
+                    break;
+                }
             }
-            e.target.valueAsDate = nextValid;
+            if (foundValid) {
+                e.target.valueAsDate = nextValid;
+            }
+            dateError.textContent = '⚠️ הזמנות אפשריות לימי שלישי ושישי, או לחגים בלבד';
             dateError.classList.remove('hidden');
         } else {
             dateError.classList.add('hidden');
         }
     });
 
-    // Prefill the next Friday or Tuesday depending on which comes first
+    // Prefill the next Friday or Tuesday or open date depending on which comes first
     let offset = 1;
     let found = false;
-    while (!found && offset < 14) {
+    while (!found && offset < 30) {
         const candidate = getNextDate(offset);
-        if (candidate.getDay() === 2 || candidate.getDay() === 5) {
+        const cday = candidate.getDay();
+        const cstr = getLocalISODate(candidate);
+        if (cday === 2 || cday === 5 || openDates.includes(cstr)) {
             dateInput.valueAsDate = candidate;
             found = true;
         }

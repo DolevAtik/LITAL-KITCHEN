@@ -9,6 +9,7 @@ function checkAuth() {
             sessionStorage.setItem('lital_admin_auth', 'true');
             document.getElementById('admin-main').style.display = 'block';
             loadProducts();
+            loadOpenDates();
         } else {
             alert("סיסמה שגויה");
             window.location.href = "index.html";
@@ -16,6 +17,7 @@ function checkAuth() {
     } else {
         document.getElementById('admin-main').style.display = 'block';
         loadProducts();
+        loadOpenDates();
     }
 }
 
@@ -258,6 +260,61 @@ document.getElementById('import-btn').addEventListener('click', async () => {
         }
     }
 });
+
+// SPECIAL DATES MANAGEMENT
+let openDatesList = [];
+
+async function loadOpenDates() {
+    const { data, error } = await supabaseClient.from('open_dates').select('*').order('date_string');
+    if (!error && data) {
+        openDatesList = data;
+        renderOpenDates();
+    }
+}
+
+function renderOpenDates() {
+    const list = document.getElementById('open-dates-list');
+    list.innerHTML = '';
+    
+    if (openDatesList.length === 0) {
+        list.innerHTML = '<li style="color: #666; font-style: italic;">אין תאריכים מיוחדים פתוחים כרגע.</li>';
+        return;
+    }
+
+    openDatesList.forEach(item => {
+        const li = document.createElement('li');
+        li.style = "display:flex; justify-content:space-between; align-items:center; padding: 10px; border: 1px solid #ddd; margin-bottom: 5px; border-radius: 5px; background: #fff;";
+        
+        // Format date nicely
+        const [y, m, d] = item.date_string.split('-');
+        const formatted = `${d}/${m}/${y}`;
+
+        li.innerHTML = `
+            <span style="font-weight: 600;">${formatted}</span>
+            <button class="action-btn delete-btn" onclick="deleteOpenDate('${item.id}')" style="padding: 5px 10px; font-size: 0.8rem;">מחק</button>
+        `;
+        list.appendChild(li);
+    });
+}
+
+document.getElementById('add-date-btn').addEventListener('click', async () => {
+    const d = document.getElementById('special-date-input').value;
+    if (!d) return;
+    const { error } = await supabaseClient.from('open_dates').insert([{ date_string: d }]);
+    if (error) {
+        alert("שגיאה בהוספת תאריך. ייתכן שהוא כבר קיים.");
+    } else { 
+        document.getElementById('special-date-input').value = ''; 
+        loadOpenDates(); 
+    }
+});
+
+async function deleteOpenDate(id) {
+    if (confirm("בטוח שברצונך למחוק תאריך זה?")) {
+        const { error } = await supabaseClient.from('open_dates').delete().eq('id', id);
+        if (!error) loadOpenDates();
+    }
+}
 
 // START
 createOptionRow('רגיל', '');

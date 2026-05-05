@@ -117,6 +117,16 @@
             </table>
         </section>
 
+        <section class="admin-card">
+            <h2>תאריכים מיוחדים / חגים פתוחים להזמנה</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">כאן תוכלו לפתוח תאריכים מיוחדים (כמו חגים) שאינם שלישי או שישי, כדי לאפשר ללקוחות לבחור בהם בעגלת הקניות.</p>
+            <div class="form-group" style="display: flex; gap: 10px; align-items: center;">
+                <input type="date" id="special-date-input" style="flex:1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                <button id="add-date-btn" class="btn btn-primary">הוסף תאריך</button>
+            </div>
+            <ul id="open-dates-list" style="margin-top: 15px; list-style: none; padding: 0;"></ul>
+        </section>
+
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
