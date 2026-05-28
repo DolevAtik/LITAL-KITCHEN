@@ -66,21 +66,130 @@ function renderProductsTable() {
     });
 }
 
-// Option Management
+// Option Management — canonical salad labels (must match script.js deal logic)
+const SALAD_SIZE_250 = '250 מ"ל';
+const SALAD_SIZE_500 = '500 מ"ל';
+
 const optionsContainer = document.getElementById('options-container');
+const categorySelect = document.getElementById('p-category');
+const saladPresetsBar = document.getElementById('salad-options-presets');
+
+function isSaladsCategory() {
+    return categorySelect.value === 'salads';
+}
+
+function normalizeSaladOptionLabel(label) {
+    const compact = String(label || '')
+        .replace(/[\u05F3\u05F4״''"]/g, '"')
+        .replace(/\s+/g, '')
+        .trim();
+    if (/^250/.test(compact) && !/500/.test(compact)) return SALAD_SIZE_250;
+    if (/^500/.test(compact)) return SALAD_SIZE_500;
+    return String(label || '').trim();
+}
+
+function updateSaladOptionsUI() {
+    const isSalad = isSaladsCategory();
+    saladPresetsBar.classList.toggle('hidden', !isSalad);
+
+    optionsContainer.querySelectorAll('.opt-label').forEach((input) => {
+        const normalized = normalizeSaladOptionLabel(input.value);
+        const isPreset = isSalad && (normalized === SALAD_SIZE_250 || normalized === SALAD_SIZE_500);
+        input.classList.toggle('salad-preset-label', isPreset);
+        input.placeholder = isSalad ? 'או הקלד תווית מותאמת' : 'תווית (למשל: רגיל)';
+    });
+}
+
+function ensureSaladDefaultOptions() {
+    if (!isSaladsCategory()) return;
+
+    const rows = optionsContainer.querySelectorAll('.option-row');
+    if (rows.length !== 1) return;
+
+    const labelInput = rows[0].querySelector('.opt-label');
+    const priceInput = rows[0].querySelector('.opt-price');
+    const label = labelInput.value.trim();
+    const price = priceInput.value.trim();
+
+    if ((label === '' || label === 'רגיל') && !price) {
+        optionsContainer.innerHTML = '';
+        createOptionRow(SALAD_SIZE_250, '');
+        createOptionRow(SALAD_SIZE_500, '');
+    }
+}
+
+function addOrFocusSaladOption(standardLabel) {
+    const rows = optionsContainer.querySelectorAll('.option-row');
+    for (const row of rows) {
+        const labelInput = row.querySelector('.opt-label');
+        if (normalizeSaladOptionLabel(labelInput.value) === standardLabel) {
+            labelInput.value = standardLabel;
+            labelInput.classList.add('salad-preset-label');
+            row.querySelector('.opt-price').focus();
+            return;
+        }
+    }
+    createOptionRow(standardLabel, '');
+    optionsContainer.lastElementChild.querySelector('.opt-price').focus();
+}
 
 function createOptionRow(label = '', price = '') {
     const div = document.createElement('div');
     div.className = 'option-row';
-    div.innerHTML = `
-        <input type="text" placeholder="תווית (למשל: רגיל/250מ״ל)" class="opt-label" value="${label}" required>
-        <input type="number" placeholder="מחיר" class="opt-price" value="${price}" required>
-        <button type="button" class="remove-opt-btn" onclick="this.parentElement.remove()">X</button>
-    `;
+
+    const labelInput = document.createElement('input');
+    labelInput.type = 'text';
+    labelInput.className = 'opt-label';
+    labelInput.required = true;
+    labelInput.value = label;
+    labelInput.placeholder = isSaladsCategory() ? 'או הקלד תווית מותאמת' : 'תווית (למשל: רגיל)';
+
+    const normalized = normalizeSaladOptionLabel(label);
+    if (isSaladsCategory() && (normalized === SALAD_SIZE_250 || normalized === SALAD_SIZE_500)) {
+        labelInput.value = normalized;
+        labelInput.classList.add('salad-preset-label');
+    }
+
+    const priceInput = document.createElement('input');
+    priceInput.type = 'number';
+    priceInput.className = 'opt-price';
+    priceInput.placeholder = 'מחיר';
+    priceInput.required = true;
+    priceInput.min = '0';
+    priceInput.step = '1';
+    if (price !== '' && price !== null && price !== undefined) {
+        priceInput.value = price;
+    }
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'remove-opt-btn';
+    removeBtn.textContent = 'X';
+    removeBtn.addEventListener('click', () => div.remove());
+
+    div.appendChild(labelInput);
+    div.appendChild(priceInput);
+    div.appendChild(removeBtn);
     optionsContainer.appendChild(div);
 }
 
 document.getElementById('add-option-btn').addEventListener('click', () => createOptionRow());
+document.getElementById('add-salad-250').addEventListener('click', () => addOrFocusSaladOption(SALAD_SIZE_250));
+document.getElementById('add-salad-500').addEventListener('click', () => addOrFocusSaladOption(SALAD_SIZE_500));
+
+categorySelect.addEventListener('change', () => {
+    ensureSaladDefaultOptions();
+    updateSaladOptionsUI();
+});
+
+optionsContainer.addEventListener('blur', (e) => {
+    if (!e.target.classList.contains('opt-label') || !isSaladsCategory()) return;
+    const normalized = normalizeSaladOptionLabel(e.target.value);
+    if (normalized === SALAD_SIZE_250 || normalized === SALAD_SIZE_500) {
+        e.target.value = normalized;
+    }
+    updateSaladOptionsUI();
+}, true);
 
 document.getElementById('p-customizable').addEventListener('change', (e) => {
     document.getElementById('customization-settings').style.display = e.target.checked ? 'block' : 'none';
@@ -105,8 +214,12 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
     const optPrices = document.querySelectorAll('.opt-price');
     const options = [];
     for (let i = 0; i < optLabels.length; i++) {
+        let label = optLabels[i].value.trim();
+        if (document.getElementById('p-category').value === 'salads') {
+            label = normalizeSaladOptionLabel(label);
+        }
         options.push({
-            label: optLabels[i].value,
+            label,
             price: Number(optPrices[i].value)
         });
     }
@@ -188,6 +301,7 @@ function editProduct(id) {
 
     optionsContainer.innerHTML = '';
     (p.options || []).forEach(o => createOptionRow(o.label, o.price));
+    updateSaladOptionsUI();
 
     document.getElementById('p-customizable').checked = p.customizable || false;
     document.getElementById('customization-settings').style.display = p.customizable ? 'block' : 'none';
@@ -210,6 +324,7 @@ function resetForm() {
     document.getElementById('edit-id').value = '';
     optionsContainer.innerHTML = '';
     createOptionRow('רגיל', '');
+    updateSaladOptionsUI();
     document.getElementById('customization-settings').style.display = 'none';
     document.getElementById('limit-group').style.display = 'none';
     document.getElementById('save-btn').textContent = 'שמור מוצר חדש';
@@ -318,4 +433,5 @@ async function deleteOpenDate(id) {
 
 // START
 createOptionRow('רגיל', '');
+updateSaladOptionsUI();
 checkAuth();

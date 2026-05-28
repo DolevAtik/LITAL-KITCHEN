@@ -51,6 +51,50 @@
     min-height: 80px;
 }
 
+.salad-options-presets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 8px;
+}
+
+.salad-options-presets.hidden {
+    display: none;
+}
+
+.salad-presets-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #166534;
+}
+
+.btn-salad-preset {
+    background: #fff;
+    color: #166534;
+    border: 2px solid #22c55e;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-salad-preset:hover {
+    background: #dcfce7;
+}
+
+.option-row .opt-label.salad-preset-label {
+    background: #f0fdf4;
+    border-color: #86efac;
+    font-weight: 600;
+}
+
 .option-row {
     display: flex;
     gap: 10px;
