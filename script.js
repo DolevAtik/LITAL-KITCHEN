@@ -425,19 +425,28 @@ function calculateTotal() {
         }
     });
 
-    // Sort ascending so the cheapest salads go into the deal
-    salads250Items.sort((a, b) => a.price - b.price);
+    // Expensive salads first — bundle only when 100 is cheaper than paying separately
+    salads250Items.sort((a, b) => b.price - a.price);
 
     const groupsOf6 = Math.floor(salads250Items.length / 6);
-    total += groupsOf6 * 100;
+    let totalSaved = 0;
+    let dealBundlesApplied = 0;
 
-    const remainderStart = groupsOf6 * 6;
-    let originalPriceForGroups = 0;
-
-    for (let i = 0; i < remainderStart; i++) {
-        originalPriceForGroups += salads250Items[i].price;
+    for (let g = 0; g < groupsOf6; g++) {
+        let groupSum = 0;
+        for (let i = g * 6; i < (g + 1) * 6; i++) {
+            groupSum += salads250Items[i].price;
+        }
+        if (groupSum > 100) {
+            total += 100;
+            totalSaved += groupSum - 100;
+            dealBundlesApplied++;
+        } else {
+            total += groupSum;
+        }
     }
 
+    const remainderStart = groupsOf6 * 6;
     for (let i = remainderStart; i < salads250Items.length; i++) {
         total += salads250Items[i].price;
     }
@@ -445,10 +454,9 @@ function calculateTotal() {
     const discountTextEl = document.getElementById('discount-text');
     const discountAlert = document.getElementById('discount-alert');
 
-    if (groupsOf6 > 0) {
-        const saved = originalPriceForGroups - (groupsOf6 * 100);
+    if (dealBundlesApplied > 0 && totalSaved > 0) {
         discountAlert.classList.remove('hidden');
-        discountTextEl.textContent = `נהדר! הופעל מבצע 6 סלטים ב-100 (חסכת ${saved} ₪)`;
+        discountTextEl.textContent = `נהדר! הופעל מבצע 6 סלטים ב-100 (חסכת ${totalSaved} ₪)`;
     } else {
         discountAlert.classList.add('hidden');
     }
