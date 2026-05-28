@@ -668,8 +668,8 @@ h4 {
     width: 100%;
     max-width: 450px;
     height: 100%;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
     transform: translateX(0);
@@ -700,11 +700,16 @@ h4 {
     /* For absolute X */
 }
 
-.cart-modal-body {
+/* Single scroll area: items + checkout form (avoids nested scroll traps) */
+.cart-modal-scroll {
+    flex: 1;
     min-height: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+    padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .modal-header h2 {
@@ -729,13 +734,7 @@ h4 {
 
 
 .cart-items {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 1rem 1.5rem;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    padding: 1rem 1.5rem 0.5rem;
 }
 
 .cart-item-row {
@@ -795,10 +794,6 @@ h4 {
 }
 
 .cart-empty {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     text-align: center;
     padding: 3rem 1.5rem;
     color: var(--text-muted);
@@ -806,17 +801,18 @@ h4 {
 }
 
 .order-form-container {
-    padding: 1.25rem 1.5rem 1.5rem;
+    padding: 1.25rem 1.5rem 2rem;
     background-color: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-    max-height: min(52vh, 420px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    border-top: 2px solid var(--border-color);
+    margin-top: 0.5rem;
 }
 
-.order-form-container.hidden {
-    display: none;
+.order-form-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
 }
 
 .form-group {
@@ -838,6 +834,7 @@ h4 {
     border-radius: var(--radius-md);
     font-family: inherit;
     font-size: 1rem;
+    scroll-margin: 5rem;
 }
 
 .date-error-msg {
