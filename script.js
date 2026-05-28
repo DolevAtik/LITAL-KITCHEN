@@ -394,12 +394,29 @@ function addCustomizedToCart() {
     currentCustomizingItem = null;
 }
 
+/** Normalize volume labels (מ"ל vs מ״ל, spacing) for deal matching */
+function normalizeVolumeLabel(label) {
+    return String(label || '')
+        .replace(/[\u05F3\u05F4״''"]/g, '"')
+        .replace(/\u00A0/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function isSalad250ml(optionLabel) {
+    const n = normalizeVolumeLabel(optionLabel).replace(/\s/g, '');
+    if (!/^250/.test(n)) return false;
+    if (/500/.test(n)) return false;
+    // מ"ל, מ״ל, or truncated labels like "250 מ" (missing ל)
+    return /מ/.test(n);
+}
+
 function calculateTotal() {
     let total = 0;
     let salads250Items = [];
 
     Object.values(cart).forEach(item => {
-        if (item.categoryId === 'salads' && item.optionLabel === '250 מ"ל') {
+        if (item.categoryId === 'salads' && isSalad250ml(item.optionLabel)) {
             for (let i = 0; i < item.quantity; i++) {
                 salads250Items.push(item);
             }
