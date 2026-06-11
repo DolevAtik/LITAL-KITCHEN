@@ -108,6 +108,13 @@ h4 {
     flex-wrap: wrap;
 }
 
+.deal-note {
+    display: block;
+    font-size: 0.78rem;
+    opacity: 0.85;
+    margin-top: 0.25rem;
+}
+
 @keyframes pulse {
     0% {
         transform: scale(1);
