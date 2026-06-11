@@ -39,9 +39,8 @@ async function init() {
             console.error("Error fetching products:", error);
             alert("שגיאה בטעינת התפריט");
         } else if (data) {
-            MENU_DATA = CATEGORIES.map(cat => ({
-                ...cat,
-                items: data.filter(item => item.category_id === cat.categoryId)
+            MENU_DATA = CATEGORIES.map(cat => {
+                let items = data.filter(item => item.category_id === cat.categoryId)
                            .map(item => ({
                                id: item.id,
                                name: item.name,
@@ -53,8 +52,17 @@ async function init() {
                                customizationType: item.customization_type,
                                customizationLimit: item.customization_limit,
                                customizationOptions: item.customization_options
-                           }))
-            })).filter(cat => cat.items.length > 0);
+                           }));
+                if (cat.categoryId === 'salads') {
+                    items.sort((a, b) => {
+                        const pinned = 'סלט ביצים מטבוחה';
+                        if (a.name === pinned) return -1;
+                        if (b.name === pinned) return 1;
+                        return 0;
+                    });
+                }
+                return { ...cat, items };
+            }).filter(cat => cat.items.length > 0);
         }
     } catch(err) {
         console.error("Failed to fetch from DB:", err);
