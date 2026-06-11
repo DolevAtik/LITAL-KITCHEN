@@ -54,11 +54,13 @@ async function init() {
                                customizationOptions: item.customization_options
                            }));
                 if (cat.categoryId === 'salads') {
+                    const pinnedOrder = ['סלט ביצים', 'מטבוחה'];
                     items.sort((a, b) => {
-                        const isPinned = name => name.includes('ביצים') && name.includes('מטבוחה');
-                        if (isPinned(a.name)) return -1;
-                        if (isPinned(b.name)) return 1;
-                        return 0;
+                        const ai = pinnedOrder.findIndex(p => a.name.includes(p));
+                        const bi = pinnedOrder.findIndex(p => b.name.includes(p));
+                        const aPin = ai === -1 ? 999 : ai;
+                        const bPin = bi === -1 ? 999 : bi;
+                        return aPin - bPin;
                     });
                 }
                 return { ...cat, items };
