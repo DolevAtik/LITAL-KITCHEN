@@ -425,8 +425,8 @@ function calculateTotal() {
         }
     });
 
-    // Expensive salads first — bundle only when 100 is cheaper than paying separately
-    salads250Items.sort((a, b) => b.price - a.price);
+    // Cheapest salads first — deal applies to the 6 cheapest when ordering more than 6
+    salads250Items.sort((a, b) => a.price - b.price);
 
     const groupsOf6 = Math.floor(salads250Items.length / 6);
     let totalSaved = 0;
