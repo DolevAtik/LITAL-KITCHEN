@@ -55,9 +55,9 @@ async function init() {
                            }));
                 if (cat.categoryId === 'salads') {
                     items.sort((a, b) => {
-                        const pinned = 'סלט ביצים מטבוחה';
-                        if (a.name === pinned) return -1;
-                        if (b.name === pinned) return 1;
+                        const isPinned = name => name.includes('ביצים') && name.includes('מטבוחה');
+                        if (isPinned(a.name)) return -1;
+                        if (isPinned(b.name)) return 1;
                         return 0;
                     });
                 }
