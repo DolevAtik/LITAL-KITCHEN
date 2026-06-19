@@ -362,7 +362,7 @@ function addCustomizedToCart() {
 
     if (item.customizationType === 'quantity-limit') {
         Object.entries(selections).forEach(([opt, qty]) => {
-            if (qty > 0) selected.push(`${qty}x ${opt}`);
+            if (qty > 0) selected.push(`${opt} ×${qty}`);
         });
     } else {
         const checkboxes = document.querySelectorAll('input[name="custom-opt"]:checked');
@@ -680,9 +680,12 @@ function setupEventListeners() {
         let message = `*שם:* ${name}\n`;
         message += `*שלום ליטל, אשמח להזמין:* 👩‍🍳\n\n`;
 
-        Object.values(cart).forEach(item => {
+        const cartItems = Object.values(cart);
+        const nonSalads = cartItems.filter(item => item.categoryId !== 'salads');
+        const salads = cartItems.filter(item => item.categoryId === 'salads');
+        [...nonSalads, ...salads].forEach(item => {
             const labelText = (item.optionLabel === 'רגיל' || item.optionLabel === 'יחידה' || item.optionLabel === 'משפחתי') ? '' : ` (${item.optionLabel})`;
-            const custText = item.customizations && item.customizations.length > 0 ? `\n   ┗ ${item.customizations.join(', ')}` : '';
+            const custText = item.customizations && item.customizations.length > 0 ? item.customizations.map(c => `\n   ┗ ${c}`).join('') : '';
             message += `• ${item.quantity}x ${item.name}${labelText}${custText}\n`;
         });
 
