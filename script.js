@@ -508,13 +508,9 @@ function calculateTotal() {
         for (let i = g * 6; i < (g + 1) * 6; i++) {
             groupSum += salads250Items[i].price;
         }
-        if (groupSum > 100) {
-            total += 100;
-            totalSaved += groupSum - 100;
-            dealBundlesApplied++;
-        } else {
-            total += groupSum;
-        }
+        total += 100;
+        totalSaved += groupSum - 100;
+        dealBundlesApplied++;
     }
 
     const remainderStart = groupsOf6 * 6;
@@ -525,9 +521,11 @@ function calculateTotal() {
     const discountTextEl = document.getElementById('discount-text');
     const discountAlert = document.getElementById('discount-alert');
 
-    if (dealBundlesApplied > 0 && totalSaved > 0) {
+    if (dealBundlesApplied > 0) {
         discountAlert.classList.remove('hidden');
-        discountTextEl.textContent = `נהדר! הופעל מבצע 6 סלטים ב-100 (חסכת ${totalSaved} ₪)`;
+        discountTextEl.textContent = totalSaved > 0
+            ? `נהדר! הופעל מבצע 6 סלטים ב-100 (חסכת ${totalSaved} ₪)`
+            : `נהדר! הופעל מבצע 6 סלטים ב-100`;
     } else {
         discountAlert.classList.add('hidden');
     }
