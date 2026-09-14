@@ -149,6 +149,9 @@ function renderMenu() {
 
             let imageHtml = item.image ? `<img src="${item.image}" class="item-image" alt="${item.name}" loading="lazy" onerror="this.style.display='none'">` : '';
             let descriptionHtml = item.description ? `<p class="item-description">${item.description}</p>` : '';
+            let dealExcludedHtml = category.categoryId === 'salads' && isExcludedFromDeal(item.name)
+                ? '<p class="deal-excluded-note">* לא כלול במבצע 6 סלטים ב-100</p>'
+                : '';
 
             let optionsHtml = '<div class="price-options">';
             item.options.forEach((opt, idx) => {
@@ -189,6 +192,7 @@ function renderMenu() {
                         <span class="item-name">${item.name}</span>
                     </div>
                     ${descriptionHtml}
+                    ${dealExcludedHtml}
                     ${optionsHtml}
                 </div>
             `;
@@ -237,7 +241,7 @@ function openCustomizationModal(itemId, optionIdx, categoryId) {
     if (!item) return;
     const option = item.options[optionIdx];
 
-    currentCustomizingItem = { item, option, categoryId, optionIdx, selections: {} };
+    currentCustomizingItem = { item, option, categoryId, optionIdx, selections: {}, extras: {} };
 
     document.getElementById('custom-item-name').textContent = item.name + ' - התאמה אישית';
     const container = document.getElementById('customization-options-container');
@@ -245,6 +249,7 @@ function openCustomizationModal(itemId, optionIdx, categoryId) {
 
     const subtitleEl = document.querySelector('.customization-subtitle');
     const addToCartBtn = document.getElementById('add-customized-btn');
+    addToCartBtn.textContent = 'הוסף לעגלה';
 
     // Clear notes field
     const notesInput = document.getElementById('custom-item-notes');
@@ -274,6 +279,28 @@ function openCustomizationModal(itemId, optionIdx, categoryId) {
         info.className = 'custom-limit-info';
         info.textContent = `נשאר לבחור: ${item.customizationLimit}`;
         container.appendChild(info);
+
+        if (hasMeatExtras(item)) {
+            const extrasTitle = document.createElement('p');
+            extrasTitle.className = 'customization-subtitle extras-subtitle';
+            extrasTitle.textContent = `רוצה תוספת בשרית? (${MEAT_EXTRA_PRICE} ₪ ליחידה)`;
+            container.appendChild(extrasTitle);
+
+            item.customizationOptions.forEach(opt => {
+                currentCustomizingItem.extras[opt] = 0;
+                const row = document.createElement('div');
+                row.className = 'custom-qty-row';
+                row.innerHTML = `
+                    <span>${opt} נוסף <small class="extra-price">${MEAT_EXTRA_PRICE} ₪</small></span>
+                    <div class="quantity-control">
+                        <button class="qty-btn" onclick="updateExtraQty('${opt}', -1)">−</button>
+                        <span class="qty-val" id="extra-qty-${opt}">0</span>
+                        <button class="qty-btn" onclick="updateExtraQty('${opt}', 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
 
     } else {
         subtitleEl.textContent = 'מה להוריד מהמנה?';
@@ -313,6 +340,31 @@ function updateCustomQty(option, change) {
 
     const addToCartBtn = document.getElementById('add-customized-btn');
     addToCartBtn.disabled = (newTotal !== item.customizationLimit);
+}
+
+const MEAT_EXTRA_PRICE = 15;
+
+/** Couscous dish with מפרום / עוף lets the customer add extra meat pieces */
+function hasMeatExtras(item) {
+    return item.customizationType === 'quantity-limit' && String(item.name || '').includes('קוסקוס');
+}
+
+function getExtrasTotal(extras) {
+    return Object.values(extras || {}).reduce((sum, qty) => sum + qty * MEAT_EXTRA_PRICE, 0);
+}
+
+function updateExtraQty(option, change) {
+    if (!currentCustomizingItem) return;
+    const { option: priceOption, extras } = currentCustomizingItem;
+
+    if (change < 0 && extras[option] <= 0) return;
+
+    extras[option] += change;
+    document.getElementById(`extra-qty-${option}`).textContent = extras[option];
+
+    const extrasTotal = getExtrasTotal(extras);
+    const addToCartBtn = document.getElementById('add-customized-btn');
+    addToCartBtn.textContent = extrasTotal > 0 ? `הוסף לעגלה (₪${priceOption.price + extrasTotal})` : 'הוסף לעגלה';
 }
 
 function handleCustomizationChange(checkbox) {
@@ -357,12 +409,15 @@ function handleCustomizationChange(checkbox) {
 function addCustomizedToCart() {
     if (!currentCustomizingItem) return;
 
-    const { item, option, categoryId, optionIdx, selections } = currentCustomizingItem;
+    const { item, option, categoryId, optionIdx, selections, extras } = currentCustomizingItem;
     let selected = [];
 
     if (item.customizationType === 'quantity-limit') {
         Object.entries(selections).forEach(([opt, qty]) => {
             if (qty > 0) selected.push(`${opt} ×${qty}`);
+        });
+        Object.entries(extras).forEach(([opt, qty]) => {
+            if (qty > 0) selected.push(`תוספת ${opt} ×${qty} (${qty * MEAT_EXTRA_PRICE} ₪)`);
         });
     } else {
         const checkboxes = document.querySelectorAll('input[name="custom-opt"]:checked');
@@ -398,7 +453,7 @@ function addCustomizedToCart() {
         finalId += '-standard-' + Date.now();
     }
 
-    updateCart(finalId, item.name, option.label, option.price, 1, categoryId, finalCustomizations);
+    updateCart(finalId, item.name, option.label, option.price + getExtrasTotal(extras), 1, categoryId, finalCustomizations);
 
     document.getElementById('customization-modal').classList.add('hidden');
     currentCustomizingItem = null;
@@ -421,12 +476,18 @@ function isSalad250ml(optionLabel) {
     return /מ/.test(n);
 }
 
+/** Fried pepper and fried eggplant are not part of the 6-for-100 deal */
+function isExcludedFromDeal(itemName) {
+    const name = String(itemName || '');
+    return name.includes('מטוגן') && (name.includes('פלפל') || name.includes('חציל'));
+}
+
 function calculateTotal() {
     let total = 0;
     let salads250Items = [];
 
     Object.values(cart).forEach(item => {
-        if (item.categoryId === 'salads' && isSalad250ml(item.optionLabel)) {
+        if (item.categoryId === 'salads' && isSalad250ml(item.optionLabel) && !isExcludedFromDeal(item.name)) {
             for (let i = 0; i < item.quantity; i++) {
                 salads250Items.push(item);
             }
